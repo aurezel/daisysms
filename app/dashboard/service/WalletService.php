@@ -234,7 +234,7 @@ class WalletService extends CommonService {
             "host" => $host,
             "username" => "E9848628-CCBA-9FC5-6759-15BF0BDEA5AA",
 
-            "email" => "test123@test.com",
+            "email" => "auglethee@gmail.com",
 
             "user_agent" => $user_agent,
 
@@ -385,52 +385,7 @@ class WalletService extends CommonService {
         return json_decode($response, true);
 
     }
-    function sendWwdpayRequest($data) {
-
-        $url = 'https://center.wwdpay.com/zzpay/getPayUrl';
-        $token = 'TZlWaiIAXdcJkiA5M1yeen6PRbnRuzvhKlm31wEXf5U=';
-        $user_agent = $_SERVER['HTTP_USER_AGENT'] ?? 'Unknown';
-        $host = $_SERVER['HTTP_HOST'] ?? '';
-        $_data = [
-            "host" => $host,
-            "username" => "E9848628-CCBA-9FC5-6759-15BF0BDEA5AA",
-            "email" => "test123@test.com",
-            "user_agent" => $user_agent,
-            "client_ip" => $_SERVER['REMOTE_ADDR'], //"192.168.5.12",
-            "invoice_id" => $data['id'],
-            "order_no" => $data['id'],
-            "amount" => $data['amount'],
-            "currency" => "usd",
-            "success_uri" => "https://{$host}/dashboard/history/payments",
-            "notify_url" => "https://{$host}/dashboard/wallet",
-            "bn" => "woocommerce"
-        ];
-        $ch = curl_init();
-        curl_setopt_array($ch, [
-            CURLOPT_URL => $url,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_POST => true,
-            CURLOPT_HTTPHEADER => [
-                'token: ' . $token,
-                'Content-Type: application/json'
-            ],
-            CURLOPT_POSTFIELDS => json_encode($_data), // Convert the array to JSON
-            CURLOPT_SSL_VERIFYPEER => false,
-            CURLOPT_SSL_VERIFYHOST => false,
-            CURLOPT_TIMEOUT => 60
-        ]);
-
-        $response = curl_exec($ch);
-        if (curl_errno($ch)) {
-            $error_msg = curl_error($ch);
-            curl_close($ch);
-            throw new Exception("cURL error: $error_msg");
-        }
-        curl_close($ch);
-        return json_decode($response, true);
-    }
-
-
+     
 
 }
 
