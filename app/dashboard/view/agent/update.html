@@ -1,0 +1,257 @@
+{extend name='common/_container'}
+{block name="content"}
+<div class="ibox float-e-margins">
+<input type="hidden" name='id' id='id' value="{$info.id}" />
+	<div class="ibox-content">
+		<div class="form-horizontal" id="CodeInfoForm">
+			<div class="row">
+				<div class="col-sm-12">
+				<!-- form start -->
+					<div class="form-group">
+						<label class="col-sm-2 control-label">渠道标识：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="channel" value="{$info.channel}" name="channel" class="form-control" placeholder="请输入渠道标识">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">备注：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="nick" value="{$info.nick}" name="nick" class="form-control" placeholder="请输入备注">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">账号余额：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="money" value="{$info.money}" name="money" class="form-control" placeholder="请输入账号余额">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">下级会员提成设置：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="buyvipset" value="{$info.buyvipset}" name="buyvipset" class="form-control" placeholder="请输入下级会员提成设置">
+							<span class="help-block m-b-none">0|0|0，支持三级,1为1%，0.1为千分1</span>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">渠道提成比例：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="paygetpoint" value="{$info.paygetpoint}" name="paygetpoint" class="form-control" placeholder="请输入渠道提成比例">
+							<span class="help-block m-b-none">用于续费会员提成比例</span>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">总提成：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="allmoney" value="{$info.allmoney}" name="allmoney" class="form-control" placeholder="请输入总提成">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">状态：</label>
+						<div class="col-sm-9">
+							<select lay-ignore name="status" class="form-control" id="status">
+								<option value="">请选择</option>
+								<option value="1" {if condition="$info.status eq '1'"}selected{/if}>正常</option>
+								<option value="0" {if condition="$info.status eq '0'"}selected{/if}>禁用</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">开通时间：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" value="{if condition="$info.dateline neq ''"}{$info.dateline|date='Y-m-d H:i:s'}{/if}" name="dateline"  placeholder="请输入开通时间" class="form-control" id="dateline">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">默认交易会员组ID：</label>
+						<div class="col-sm-9">
+							<select lay-ignore name="groupid" class="form-control" id="groupid">
+								<option value="">请选择</option>
+								{sql query="select id,des as gname from cd_tradegroup"}
+									<option value="{$sql.id}" {if condition="$info.groupid eq $sql.id"}selected{/if}>{$sql.gname}</option>
+								{/sql}
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">强制推荐链接：</label>
+						<div class="col-sm-9">
+							<select lay-ignore name="checkrebate" class="form-control" id="checkrebate">
+								<option value="">请选择</option>
+								<option value="1" {if condition="$info.checkrebate eq '1'"}selected{/if}>开启</option>
+								<option value="0" {if condition="$info.checkrebate eq '0'"}selected{/if}>关闭</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-group layui-form">
+						<label class="col-sm-2 control-label">开启检测金额：</label>
+						<div class="col-sm-9">
+							<?php if(!isset($info['checkbinance'])){ $info['checkbinance'] = 1; }; ?>
+							<input name="checkbinance" value="1" type="radio" {if condition="$info.checkbinance eq '1'"}checked{/if} title="开启">
+							<input name="checkbinance" value="0" type="radio" {if condition="$info.checkbinance eq '0'"}checked{/if} title="关闭">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">支持交易平台：</label>
+						<div class="col-sm-9">
+							<select lay-ignore name="tradetype" class="form-control chosen" multiple data-placeholder='请选择支持交易平台'  id="tradetype">
+								<option value="1" {if in_array("1",explode(',',$info.tradetype))}selected{/if}>OKX</option>
+								<option value="0" {if in_array("0",explode(',',$info.tradetype))}selected{/if}>Binance</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">联系方式：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="contact" value="{$info.contact}" name="contact" class="form-control" placeholder="请输入联系方式">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">联系方式图片设置：</label>
+						<div class="col-sm-6">
+							<input type="text" autocomplete="off" id="contactpic" value="{$info.contactpic}" {if condition="config('my.img_show_status') eq true"}onmousemove="showBigPic(this.value)" onmouseout="closeimg()"{/if} name="contactpic" class="form-control" placeholder="请输入联系方式图片设置">
+							<span class="help-block m-b-none contactpic_process">格式说明：如飞机，微信
+飞机:二维码图地址|微信:微信二维码地址</span>
+						</div>
+						<div class="col-sm-2" style="position:relative; right:30px;">
+							<span id="contactpic_upload"></span>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">权限设置：</label>
+						<div class="col-sm-9">
+							<select lay-ignore name="dorule" class="form-control chosen" multiple data-placeholder='请选择权限设置'  id="dorule">
+								<option value="1" {if in_array("1",explode(',',$info.dorule))}selected{/if}>关闭栏目</option>
+								<option value="2" {if in_array("2",explode(',',$info.dorule))}selected{/if}>审核用户</option>
+								<option value="3" {if in_array("3",explode(',',$info.dorule))}selected{/if}>修改会员时长</option>
+								<option value="4" {if in_array("4",explode(',',$info.dorule))}selected{/if}>清空会员挂单</option>
+								<option value="5" {if in_array("5",explode(',',$info.dorule))}selected{/if}>收益划转给渠道会员</option>
+								<option value="6" {if in_array("6",explode(',',$info.dorule))}selected{/if}>下级渠道信息</option>
+								<option value="7" {if in_array("7",explode(',',$info.dorule))}selected{/if}>用户充提管理</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">人数限制：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="maxmember" value="{$info.maxmember}" name="maxmember" class="form-control" placeholder="请输入人数限制">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">账户最小金额：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="minmoney" value="{$info.minmoney}" name="minmoney" class="form-control" placeholder="请输入账户最小金额">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">账号最大金额：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="maxmoney" value="{$info.maxmoney}" name="maxmoney" class="form-control" placeholder="请输入账号最大金额">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">当前会员数：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="nmenber" value="{$info.nmenber}" name="nmenber" class="form-control" placeholder="请输入当前会员数">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">当前总金额：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="totalmoney" value="{$info.totalmoney}" name="totalmoney" class="form-control" placeholder="请输入当前总金额">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">新用户注册送天数：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="freeday" value="{$info.freeday}" name="freeday" class="form-control" placeholder="请输入新用户注册送天数">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">二级渠道标识：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="twochannel" value="{$info.twochannel}" name="twochannel" class="form-control" placeholder="请输入二级渠道标识">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">二级渠道提成比例：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="twopaygetpoint" value="{$info.twopaygetpoint}" name="twopaygetpoint" class="form-control" placeholder="请输入二级渠道提成比例">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">三级渠道标识：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="threechannel" value="{$info.threechannel}" name="threechannel" class="form-control" placeholder="请输入三级渠道标识">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">三级渠道提成比例：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="threepaygetpoint" value="{$info.threepaygetpoint}" name="threepaygetpoint" class="form-control" placeholder="请输入三级渠道提成比例">
+						</div>
+					</div>
+				<!-- form end -->
+				</div>
+			</div>
+			<div class="hr-line-dashed"></div>
+			<div class="row btn-group-m-t">
+				<div class="col-sm-9 col-sm-offset-1">
+					<button type="button" class="btn btn-primary" onclick="CodeInfoDlg.update()" id="ensure">
+						<i class="fa fa-check"></i>&nbsp;确认提交
+					</button>
+					<button type="button" class="btn btn-danger" onclick="CodeInfoDlg.close()" id="cancel">
+						<i class="fa fa-eraser"></i>&nbsp;取消
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="__PUBLIC__/static/js/upload.js" charset="utf-8"></script>
+<script src="__PUBLIC__/static/js/plugins/layui/layui.js" charset="utf-8"></script>
+<link href='__PUBLIC__/static/js/plugins/chosen/chosen.min.css' rel='stylesheet'/>
+<script src='__PUBLIC__/static/js/plugins/chosen/chosen.jquery.js'></script>
+<script>
+layui.use(['form'],function(){});
+uploader('contactpic_upload','contactpic','image',false,'','{:url("admin/Upload/uploadImages")}');
+$(function(){$('.chosen').chosen({search_contains: true})})
+laydate.render({elem: '#dateline',type: 'datetime',trigger:'click'});
+var CodeInfoDlg = {
+	CodeInfoData: {},
+	validateFields: {
+		channel: {
+			validators: {
+	 		}
+	 	},
+	 }
+}
+
+CodeInfoDlg.collectData = function () {
+	this.set('id').set('channel').set('nick').set('money').set('buyvipset').set('paygetpoint').set('allmoney').set('status').set('dateline').set('groupid').set('checkrebate').set('tradetype').set('contact').set('contactpic').set('dorule').set('maxmember').set('minmoney').set('maxmoney').set('nmenber').set('totalmoney').set('freeday').set('twochannel').set('twopaygetpoint').set('threechannel').set('threepaygetpoint');
+};
+
+CodeInfoDlg.update = function () {
+	 this.clearData();
+	 this.collectData();
+	 if (!this.validate()) {
+	 	return;
+	 }
+	 var checkbinance = $("input[name = 'checkbinance']:checked").val();
+	 var ajax = new $ax(Feng.ctxPath + "/Agent/update", function (data) {
+	 	if ('00' === data.status) {
+	 		Feng.success(data.msg,1000);
+	 		window.parent.CodeGoods.table.refresh();
+	 		CodeInfoDlg.close();
+	 	} else {
+	 		Feng.error(data.msg + "！",1000);
+		 }
+	 })
+	 ajax.set('checkbinance',checkbinance);
+	 ajax.set(this.CodeInfoData);
+	 ajax.start();
+};
+
+
+</script>
+<script src="__PUBLIC__/static/js/base.js" charset="utf-8"></script>
+{/block}

@@ -1,0 +1,103 @@
+{extend name='common/_container'}
+{block name="content"}
+<div class="ibox float-e-margins">
+	<div class="ibox-content">
+		<div class="form-horizontal" id="CodeInfoForm">
+			<div class="row">
+				<div class="col-sm-12">
+				<!-- form start -->
+					<div class="form-group">
+						<label class="col-sm-2 control-label">同步分类ID：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="tid" value="" name="tid" class="form-control" placeholder="请输入同步分类ID">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">显示分类名：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="stitle" value="" name="stitle" class="form-control" placeholder="请输入显示分类名">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">同步分类名：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="title" value="" name="title" class="form-control" placeholder="请输入同步分类名">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">英文名：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="entitle" value="" name="entitle" class="form-control" placeholder="请输入英文名">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">排序：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="learder_desc" value="" name="learder_desc" class="form-control" placeholder="请输入排序">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">图标：</label>
+						<div class="col-sm-6">
+							<input type="text" autocomplete="off" id="head_url" value="" {if condition="config('my.img_show_status') eq true"}onmousemove="showBigPic(this.value)" onmouseout="closeimg()"{/if} name="head_url" class="form-control" placeholder="请输入图标">
+							<span class="help-block m-b-none head_url_process"></span>
+						</div>
+						<div class="col-sm-2" style="position:relative; right:30px;">
+							<span id="head_url_upload"></span>
+						</div>
+					</div>
+				<!-- form end -->
+				</div>
+			</div>
+			<div class="hr-line-dashed"></div>
+			<div class="row btn-group-m-t">
+				<div class="col-sm-9 col-sm-offset-1">
+					<button type="button" class="btn btn-primary" onclick="CodeInfoDlg.add()" id="ensure">
+						<i class="fa fa-check"></i>&nbsp;确认提交
+					</button>
+					<button type="button" class="btn btn-danger" onclick="CodeInfoDlg.close()" id="cancel">
+						<i class="fa fa-eraser"></i>&nbsp;取消
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="__PUBLIC__/static/js/upload.js" charset="utf-8"></script>
+<script src="__PUBLIC__/static/js/plugins/layui/layui.js" charset="utf-8"></script>
+<script>
+layui.use(['form'],function(){});
+uploader('head_url_upload','head_url','image',false,'','{:url("admin/Upload/uploadImages")}');
+var CodeInfoDlg = {
+	CodeInfoData: {},
+	validateFields: {
+	 }
+}
+
+CodeInfoDlg.collectData = function () {
+	this.set('id').set('tid').set('stitle').set('title').set('entitle').set('learder_desc').set('head_url');
+};
+
+CodeInfoDlg.add = function () {
+	 this.clearData();
+	 this.collectData();
+	 if (!this.validate()) {
+	 	return;
+	 }
+	 var ajax = new $ax(Feng.ctxPath + "/Leadercategory/add", function (data) {
+	 	if ('00' === data.status) {
+	 		Feng.success(data.msg,1000);
+	 		window.parent.CodeGoods.table.refresh();
+	 		CodeInfoDlg.close();
+	 	} else {
+	 		Feng.error(data.msg + "！",1000);
+		 }
+	 })
+	 ajax.set(this.CodeInfoData);
+	 ajax.start();
+};
+
+
+</script>
+<script src="__PUBLIC__/static/js/base.js" charset="utf-8"></script>
+{/block}

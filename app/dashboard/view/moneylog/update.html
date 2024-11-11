@@ -1,0 +1,148 @@
+{extend name='common/_container'}
+{block name="content"}
+<div class="ibox float-e-margins">
+<input type="hidden" name='moneylog_id' id='moneylog_id' value="{$info.moneylog_id}" />
+	<div class="ibox-content">
+		<div class="form-horizontal" id="CodeInfoForm">
+			<div class="row">
+				<div class="col-sm-12">
+				<!-- form start -->
+					<div class="form-group">
+						<label class="col-sm-2 control-label">会员ID：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="member_id" value="{$info.member_id}" name="member_id" class="form-control" placeholder="请输入会员ID">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">会员手机：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="mobile" value="{$info.mobile}" name="mobile" class="form-control" placeholder="请输入会员手机">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">说明：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="des" value="{$info.des}" name="des" class="form-control" placeholder="请输入说明">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">变动后金额：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="balance" value="{$info.balance}" name="balance" class="form-control" placeholder="请输入变动后金额">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">变动金额：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="money" value="{$info.money}" name="money" class="form-control" placeholder="请输入变动金额">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">收支类型：</label>
+						<div class="col-sm-9">
+							<select lay-ignore name="type" class="form-control" id="type">
+								<option value="">请选择</option>
+								<option value="1" {if condition="$info.type eq '1'"}selected{/if}>收入</option>
+								<option value="2" {if condition="$info.type eq '2'"}selected{/if}>支出</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">交易模块：</label>
+						<div class="col-sm-9">
+							<select lay-ignore name="trantype" class="form-control" id="trantype">
+								<option value="">请选择</option>
+								<option value="1" {if condition="$info.trantype eq '1'"}selected{/if}>充值</option>
+								<option value="2" {if condition="$info.trantype eq '2'"}selected{/if}>提成</option>
+								<option value="3" {if condition="$info.trantype eq '3'"}selected{/if}>购买VIP扣费</option>
+								<option value="4" {if condition="$info.trantype eq '4'"}selected{/if}>还款</option>
+								<option value="5" {if condition="$info.trantype eq '5'"}selected{/if}>提现</option>
+								<option value="6" {if condition="$info.trantype eq '6'"}selected{/if}>资金划转</option>
+								<option value="7" {if condition="$info.trantype eq '7'"}selected{/if}>渠道资金划转</option>
+								<option value="8" {if condition="$info.trantype eq '8'"}selected{/if}>活动赠送</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">交易IP：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="ip" value="{$info.ip}" name="ip" class="form-control" placeholder="请输入交易IP">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">交易日期：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" value="{if condition="$info.dateline neq ''"}{$info.dateline|date='Y-m-d H:i:s'}{/if}" name="dateline"  placeholder="请输入交易日期" class="form-control" id="dateline">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">提现状态：</label>
+						<div class="col-sm-9">
+							<select lay-ignore name="txstatus" class="form-control" id="txstatus">
+								<option value="">请选择</option>
+								<option value="1" {if condition="$info.txstatus eq '1'"}selected{/if}>正常</option>
+								<option value="0" {if condition="$info.txstatus eq '0'"}selected{/if}>处理中</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">定单号：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="trade_no" value="{$info.trade_no}" name="trade_no" class="form-control" placeholder="请输入定单号">
+						</div>
+					</div>
+				<!-- form end -->
+				</div>
+			</div>
+			<div class="hr-line-dashed"></div>
+			<div class="row btn-group-m-t">
+				<div class="col-sm-9 col-sm-offset-1">
+					<button type="button" class="btn btn-primary" onclick="CodeInfoDlg.update()" id="ensure">
+						<i class="fa fa-check"></i>&nbsp;确认提交
+					</button>
+					<button type="button" class="btn btn-danger" onclick="CodeInfoDlg.close()" id="cancel">
+						<i class="fa fa-eraser"></i>&nbsp;取消
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="__PUBLIC__/static/js/upload.js" charset="utf-8"></script>
+<script src="__PUBLIC__/static/js/plugins/layui/layui.js" charset="utf-8"></script>
+<script>
+layui.use(['form'],function(){});
+laydate.render({elem: '#dateline',type: 'datetime',trigger:'click'});
+var CodeInfoDlg = {
+	CodeInfoData: {},
+	validateFields: {
+	 }
+}
+
+CodeInfoDlg.collectData = function () {
+	this.set('moneylog_id').set('member_id').set('mobile').set('des').set('balance').set('money').set('type').set('trantype').set('ip').set('dateline').set('txstatus').set('trade_no');
+};
+
+CodeInfoDlg.update = function () {
+	 this.clearData();
+	 this.collectData();
+	 if (!this.validate()) {
+	 	return;
+	 }
+	 var ajax = new $ax(Feng.ctxPath + "/Moneylog/update", function (data) {
+	 	if ('00' === data.status) {
+	 		Feng.success(data.msg,1000);
+	 		window.parent.CodeGoods.table.refresh();
+	 		CodeInfoDlg.close();
+	 	} else {
+	 		Feng.error(data.msg + "！",1000);
+		 }
+	 })
+	 ajax.set(this.CodeInfoData);
+	 ajax.start();
+};
+
+
+</script>
+<script src="__PUBLIC__/static/js/base.js" charset="utf-8"></script>
+{/block}

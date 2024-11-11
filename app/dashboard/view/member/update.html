@@ -1,0 +1,193 @@
+{extend name='common/_container'}
+{block name="content"}
+<div class="ibox float-e-margins">
+<input type="hidden" name='member_id' id='member_id' value="{$info.member_id}" />
+	<div class="ibox-content">
+		<div class="form-horizontal" id="CodeInfoForm">
+			<div class="row">
+				<div class="col-sm-12">
+				<!-- form start -->
+					<div class="form-group">
+						<label class="col-sm-2 control-label">会员名称：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="membername" value="{$info.membername}" name="membername" class="form-control" placeholder="请输入会员名称">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">密码：</label>
+						<div class="col-sm-9">
+							<input type="password" id="pwd" value="{$info.pwd}" name="pwd" class="form-control" placeholder="请输入密码">
+						</div>
+					</div>
+					<div class="form-group layui-form">
+						<label class="col-sm-2 control-label">性别：</label>
+						<div class="col-sm-9">
+							<?php if(!isset($info['sex'])){ $info['sex'] = '1'; }; ?>
+							<input name="sex" value="1" type="radio" {if condition="$info.sex eq '1'"}checked{/if} title="男">
+							<input name="sex" value="2" type="radio" {if condition="$info.sex eq '2'"}checked{/if} title="女">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">头像：</label>
+						<div class="col-sm-6">
+							<input type="text" autocomplete="off" id="avatar" value="{$info.avatar}" {if condition="config('my.img_show_status') eq true"}onmousemove="showBigPic(this.value)" onmouseout="closeimg()"{/if} name="avatar" class="form-control" placeholder="请输入头像">
+							<span class="help-block m-b-none avatar_process"></span>
+						</div>
+						<div class="col-sm-2" style="position:relative; right:30px;">
+							<span id="avatar_upload"></span>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">手机号：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="mobile" value="{$info.mobile}" name="mobile" class="form-control" placeholder="请输入手机号">
+						</div>
+					</div>
+					<div class="form-group layui-form">
+						<label class="col-sm-2 control-label">状态：</label>
+						<div class="col-sm-9">
+							<?php if(!isset($info['status'])){ $info['status'] = 1; }; ?>
+							<input name="status" value="1" type="radio" {if condition="$info.status eq '1'"}checked{/if} title="开启">
+							<input name="status" value="0" type="radio" {if condition="$info.status eq '0'"}checked{/if} title="关闭">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">昵称：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="nickname" value="{$info.nickname}" name="nickname" class="form-control" placeholder="请输入昵称">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">U账号余额：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="umoney" value="{$info.umoney}" name="umoney" class="form-control" placeholder="请输入U账号余额">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">上级ID：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="parentid" value="{$info.parentid}" name="parentid" class="form-control" placeholder="请输入上级ID">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">会员类型：</label>
+						<div class="col-sm-9">
+							<select lay-ignore name="utype" class="form-control" id="utype">
+								<option value="">请选择</option>
+								<option value="1" {if condition="$info.utype eq '1'"}selected{/if}>普通会员</option>
+								<option value="2" {if condition="$info.utype eq '2'"}selected{/if}>代理会员</option>
+								<option value="3" {if condition="$info.utype eq '3'"}selected{/if}>团长</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">会员组：</label>
+						<div class="col-sm-9">
+							<select lay-ignore name="groupid" class="form-control" id="groupid">
+								<option value="">请选择</option>
+								{sql query="select id,des as gname from cd_tradegroup"}
+									<option value="{$sql.id}" {if condition="$info.groupid eq $sql.id"}selected{/if}>{$sql.gname}</option>
+								{/sql}
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">上二级ID：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="twoid" value="{$info.twoid}" name="twoid" class="form-control" placeholder="请输入上二级ID">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">上三级ID：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="threeid" value="{$info.threeid}" name="threeid" class="form-control" placeholder="请输入上三级ID">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">渠道：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="channel" value="{$info.channel}" name="channel" class="form-control" placeholder="请输入渠道">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">提成设置：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="buyvipset" value="{$info.buyvipset}" name="buyvipset" class="form-control" placeholder="请输入提成设置">
+							<span class="help-block m-b-none">0|0|0，支持三级,1为1%，0.1为千分1</span>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">盈利率提成比例：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="profitpoint" value="{$info.profitpoint}" name="profitpoint" class="form-control" placeholder="请输入盈利率提成比例">
+						</div>
+					</div>
+					<div class="form-group layui-form">
+						<label class="col-sm-2 control-label">开启自动扣款：</label>
+						<div class="col-sm-9">
+							<?php if(!isset($info['aupay'])){ $info['aupay'] = 0; }; ?>
+							<input name="aupay" value="1" type="radio" {if condition="$info.aupay eq '1'"}checked{/if} title="开启">
+							<input name="aupay" value="0" type="radio" {if condition="$info.aupay eq '0'"}checked{/if} title="关闭">
+						</div>
+					</div>
+				<!-- form end -->
+				</div>
+			</div>
+			<div class="hr-line-dashed"></div>
+			<div class="row btn-group-m-t">
+				<div class="col-sm-9 col-sm-offset-1">
+					<button type="button" class="btn btn-primary" onclick="CodeInfoDlg.update()" id="ensure">
+						<i class="fa fa-check"></i>&nbsp;确认提交
+					</button>
+					<button type="button" class="btn btn-danger" onclick="CodeInfoDlg.close()" id="cancel">
+						<i class="fa fa-eraser"></i>&nbsp;取消
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="__PUBLIC__/static/js/upload.js" charset="utf-8"></script>
+<script src="__PUBLIC__/static/js/plugins/layui/layui.js" charset="utf-8"></script>
+<script>
+layui.use(['form'],function(){});
+uploader('avatar_upload','avatar','image',false,'','{:url("admin/Upload/uploadImages")}');
+var CodeInfoDlg = {
+	CodeInfoData: {},
+	validateFields: {
+	 }
+}
+
+CodeInfoDlg.collectData = function () {
+	this.set('member_id').set('membername').set('pwd').set('avatar').set('mobile').set('nickname').set('umoney').set('parentid').set('utype').set('groupid').set('twoid').set('threeid').set('channel').set('buyvipset').set('profitpoint');
+};
+
+CodeInfoDlg.update = function () {
+	 this.clearData();
+	 this.collectData();
+	 if (!this.validate()) {
+	 	return;
+	 }
+	 var sex = $("input[name = 'sex']:checked").val();
+	 var status = $("input[name = 'status']:checked").val();
+	 var aupay = $("input[name = 'aupay']:checked").val();
+	 var ajax = new $ax(Feng.ctxPath + "/Member/update", function (data) {
+	 	if ('00' === data.status) {
+	 		Feng.success(data.msg,1000);
+	 		window.parent.CodeGoods.table.refresh();
+	 		CodeInfoDlg.close();
+	 	} else {
+	 		Feng.error(data.msg + "！",1000);
+		 }
+	 })
+	 ajax.set('sex',sex);
+	 ajax.set('status',status);
+	 ajax.set('aupay',aupay);
+	 ajax.set(this.CodeInfoData);
+	 ajax.start();
+};
+
+
+</script>
+<script src="__PUBLIC__/static/js/base.js" charset="utf-8"></script>
+{/block}

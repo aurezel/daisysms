@@ -1,0 +1,226 @@
+{extend name='common/_container'} {block name="content"}
+<div class="row">
+	<div class="col-sm-12">
+		<div class="ibox float-e-margins">
+			<div class="ibox-content"> 
+				<div class="row row-lg"> 
+					<div class="col-sm-12"> 
+						<div class="row" id="searchGroup">
+							<div class="col-sm-2">
+								<div class="input-group">
+									<div class="input-group-btn">
+										<button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">类型</button>
+									</div>
+									<select class="form-control" id="type">
+										<option value="">请选择</option>
+										<option value="1">收入</option>
+										<option value="2">支出</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-sm-2">
+								<div class="input-group">
+									<div class="input-group-btn">
+										<button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">商户ID</button>
+									</div>
+									<select class="form-control" id="user_id">
+										<option value="">请选择</option>
+										{sql query="select user_id,nick from `cd_agent`"}
+										<option value="{$sql.user_id}">{$sql.nick}</option>
+										{/sql}
+									</select>
+								</div>
+							</div>
+							<div class="col-sm-3">
+								<div class="input-group">
+									<div class="input-group-btn">
+										<button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">交易时间范围</button>
+									</div>
+									<input type="text" autocomplete="off" placeholder="时间范围" class="form-control" id="dateline">
+								</div>
+							</div>
+							<div class="col-sm-2">
+								<div class="input-group">
+									<div class="input-group-btn">
+										<button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">订单号</button>
+									</div>
+									<input type="text" autocomplete="off" class="form-control" id="ordernumber" placeholder="订单号" />
+								</div>
+							</div>
+							<div class="col-sm-2">
+								<div class="input-group">
+									<div class="input-group-btn">
+										<button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">业务模块</button>
+									</div>
+									<select class="form-control" id="tradetype">
+										<option value="">请选择</option>
+										<option value="1">收益分成</option>
+										<option value="2">续费分成</option>
+										<option value="3">划转到收益</option>
+										<option value="4">划转到用户</option>
+									</select>
+								</div>
+							</div>
+							<!-- search end -->
+							<div class="col-sm-2">
+								<button type="button" class="btn btn-success " onclick="CodeGoods.search()" id="">
+									<i class="fa fa-search"></i>&nbsp;搜索
+								</button>
+								<button type="button" class="btn" onclick="CodeGoods.reset()" id="">
+									<i class="glyphicon glyphicon-share-alt"></i>&nbsp;重置
+								</button>
+							</div>
+						</div>
+						<div class="btn-group-sm" id="CodeGoodsTableToolbar" role="group">
+						{if condition="in_array('admin/Meadmoneylog/add',session('admin.nodes')) || session('admin.role_id') eq 1"}
+						<button type="button" id="add" class="btn btn-primary button-margin" onclick="CodeGoods.add()">
+						<i class="fa fa-plus"></i>&nbsp;添加
+						</button>
+						{/if}
+						{if condition="in_array('admin/Meadmoneylog/view',session('admin.nodes')) || session('admin.role_id') eq 1"}
+						<button type="button" id="view" class="btn btn-info button-margin" onclick="CodeGoods.view()">
+						<i class="fa fa-eye"></i>&nbsp;查看详情
+						</button>
+						{/if}
+						</div>
+						<table id="CodeGoodsTable" data-mobile-responsive="true" data-click-to-select="true">
+							<thead><tr><th data-field="selectItem" data-checkbox="true"></th></tr></thead>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+	var CodeGoods = {id: "CodeGoodsTable",seItem: null,table: null,layerIndex: -1};
+
+	CodeGoods.initColumn = function () {
+ 		return [
+ 			{field: 'selectItem', checkbox: true},
+ 			{title: '编号', field: 'id', visible: true, align: 'center', valign: 'middle',sortable: true},
+ 			{title: '金额', field: 'money', visible: true, align: 'center', valign: 'middle',sortable: true},
+ 			{title: '变动后金额', field: 'blance', visible: true, align: 'center', valign: 'middle',sortable: true},
+ 			{title: '类型', field: 'type', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.typeFormatter},
+ 			{title: '商户名', field: 'agname', visible: true, align: 'center', valign: 'middle',sortable: true},
+ 			{title: '订单说明', field: 'des', visible: true, align: 'center', valign: 'middle',sortable: true},
+ 			{title: '交易时间', field: 'dateline', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.datelineFormatter},
+ 			{title: '订单号', field: 'ordernumber', visible: true, align: 'center', valign: 'middle',sortable: true},
+ 			{title: '业务模块', field: 'tradetype', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.tradetypeFormatter},
+ 		];
+ 	};
+
+	CodeGoods.typeFormatter = function(value,row,index) {
+		if(value !== null){
+			var value = value.toString();
+			switch(value){
+				case '1':
+					return '<span class="label label-success">收入</span>';
+				break;
+				case '2':
+					return '<span class="label label-warning">支出</span>';
+				break;
+			}
+		}
+	}
+
+	CodeGoods.datelineFormatter = function(value,row,index) {
+		if(value){
+			return formatDateTime(value,'Y-m-d H:i:s');	
+		}
+	}
+
+	CodeGoods.tradetypeFormatter = function(value,row,index) {
+		if(value !== null){
+			var value = value.toString();
+			switch(value){
+				case '1':
+					return '<span class="label label-success">收益分成</span>';
+				break;
+				case '2':
+					return '<span class="label label-warning">续费分成</span>';
+				break;
+				case '3':
+					return '<span class="label label-warning">划转到收益</span>';
+				break;
+				case '4':
+					return '<span class="label label-warning">划转到用户</span>';
+				break;
+			}
+		}
+	}
+
+	CodeGoods.formParams = function() {
+		var queryData = {};
+		queryData['offset'] = 0;
+		queryData['type'] = $("#type").val();
+		queryData['user_id'] = $("#user_id").val();
+		queryData['dateline_start'] = $("#dateline").val().split(" - ")[0];
+		queryData['dateline_end'] = $("#dateline").val().split(" - ")[1];
+		queryData['ordernumber'] = $("#ordernumber").val();
+		queryData['tradetype'] = $("#tradetype").val();
+		return queryData;
+	}
+
+	CodeGoods.check = function () {
+		var selected = $('#' + this.id).bootstrapTable('getSelections');
+		if(selected.length == 0){
+			Feng.info("请先选中表格中的某一记录！");
+			return false;
+		}else{
+			CodeGoods.seItem = selected;
+			return true;
+		}
+	};
+
+	CodeGoods.add = function (value) {
+		var url = location.search;
+		var index = layer.open({type: 2,title: '添加',area: ['800px', '500px'],fix: false, maxmin: true,content: Feng.ctxPath + '/Meadmoneylog/add'+url});
+		this.layerIndex = index;
+		if(!IsPC()){layer.full(index)}
+	}
+
+
+	CodeGoods.view = function (value) {
+		if(value){
+			var index = layer.open({type: 2,title: '查看详情',area: ['800px', '600px'],fix: false, maxmin: true,content: Feng.ctxPath + '/Meadmoneylog/view?id='+value});
+			if(!IsPC()){layer.full(index)}
+		}else{
+			if (this.check()) {
+				var idx = '';
+				$.each(CodeGoods.seItem, function() {
+					idx += ',' + this.id;
+				});
+				idx = idx.substr(1);
+				if(idx.indexOf(",") !== -1){
+					Feng.info("请选择单条数据！");
+					return false;
+				}
+				var index = layer.open({type: 2,title: '查看详情',area: ['800px', '600px'],fix: false, maxmin: true,content: Feng.ctxPath + '/Meadmoneylog/view?id='+idx});
+				this.layerIndex = index;
+				if(!IsPC()){layer.full(index)}
+			}
+		}
+	}
+
+
+	CodeGoods.search = function() {
+		CodeGoods.table.refresh({query : CodeGoods.formParams()});
+	};
+
+	CodeGoods.reset = function() {
+		$("#searchGroup input,select").val('');
+		CodeGoods.table.refresh({query : CodeGoods.formParams()});
+	};
+
+	$(function() {
+		var defaultColunms = CodeGoods.initColumn();
+		var url = location.search;
+		var table = new BSTable(CodeGoods.id, Feng.ctxPath+"/Meadmoneylog/index"+url,defaultColunms,20);
+		table.setPaginationType("server");
+		table.setQueryParams(CodeGoods.formParams());
+		CodeGoods.table = table.init();
+	});
+	laydate.render({elem: '#dateline',type: 'datetime',range:true});
+</script>
+{/block}

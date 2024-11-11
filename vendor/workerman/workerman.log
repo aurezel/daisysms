@@ -1,0 +1,9 @@
+2020-08-11 09:51:52 pid:16547 Workerman[start.php] start in DEBUG mode
+2020-08-11 09:51:54 pid:16547 Workerman[start.php] stopping ...
+2020-08-11 09:51:54 pid:16547 Workerman[start.php] has been stopped
+2020-08-11 09:53:52 pid:17790 Workerman[start.php] start in DEBUG mode
+2020-08-11 09:54:07 pid:17790 Workerman[start.php] stopping ...
+2020-08-11 09:54:07 pid:17790 Workerman[start.php] has been stopped
+2020-08-11 09:54:49 pid:17842 Workerman[start.php] stop 
+2020-08-11 09:54:49 pid:17842 Workerman[start.php] not run
+2020-08-11 09:54:51 pid:17843 Workerman[start.php] start in DEBUG mode

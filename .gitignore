@@ -1,0 +1,8 @@
+.env
+*.sql
+runtime/log/*
+runtime/cache/*
+runtime/session/*
+config/database.php
+config/my.php
+#git rm -r --cached .

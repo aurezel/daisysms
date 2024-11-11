@@ -1,0 +1,155 @@
+{extend name='common/_container'}
+{block name="content"}
+<div class="ibox float-e-margins">
+<input type="hidden" name='id' id='id' value="{$info.id}" />
+	<div class="ibox-content">
+		<div class="form-horizontal" id="CodeInfoForm">
+			<div class="row">
+				<div class="col-sm-12">
+				<!-- form start -->
+					<div class="form-group">
+						<label class="col-sm-2 control-label">会员手机：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="mobile" value="{$info.mobile}" name="mobile" class="form-control" placeholder="请输入会员手机">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">会员ID：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="memberid" value="{$info.memberid}" name="memberid" class="form-control" placeholder="请输入会员ID">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">标题：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="title" value="{$info.title}" name="title" class="form-control" placeholder="请输入标题">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">账单金额：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="money" value="{$info.money}" name="money" class="form-control" placeholder="请输入账单金额">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">账单类型：</label>
+						<div class="col-sm-9">
+							<select lay-ignore name="type" class="form-control" id="type">
+								<option value="">请选择</option>
+								<option value="1" {if condition="$info.type eq '1'"}selected{/if}>VIP续费</option>
+								<option value="2" {if condition="$info.type eq '2'"}selected{/if}>收益结算</option>
+								<option value="3" {if condition="$info.type eq '3'"}selected{/if}>其它</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">订单号：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="ordernumber" value="{$info.ordernumber}" name="ordernumber" class="form-control" placeholder="请输入订单号">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">订单时间：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" value="{if condition="$info.addtime neq ''"}{$info.addtime|date='Y-m-d H:i:s'}{/if}" name="addtime"  placeholder="请输入订单时间" class="form-control" id="addtime">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">状态：</label>
+						<div class="col-sm-9">
+							<select lay-ignore name="status" class="form-control" id="status">
+								<option value="">请选择</option>
+								<option value="1" {if condition="$info.status eq '1'"}selected{/if}>未结算</option>
+								<option value="2" {if condition="$info.status eq '2'"}selected{/if}>已结算</option>
+								<option value="3" {if condition="$info.status eq '3'"}selected{/if}>已失效</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">一级代理ID：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="parentid" value="{$info.parentid}" name="parentid" class="form-control" placeholder="请输入一级代理ID">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">支付状态：</label>
+						<div class="col-sm-9">
+							<select lay-ignore name="paystatus" class="form-control" id="paystatus">
+								<option value="">请选择</option>
+								<option value="1" {if condition="$info.paystatus eq '1'"}selected{/if}>未支付</option>
+								<option value="2" {if condition="$info.paystatus eq '2'"}selected{/if}>已支付</option>
+								<option value="3" {if condition="$info.paystatus eq '3'"}selected{/if}>活动赠送</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">最后还款日：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" value="{if condition="$info.lastpaytime neq ''"}{$info.lastpaytime|date='Y-m-d H:i:s'}{/if}" name="lastpaytime"  placeholder="请输入最后还款日" class="form-control" id="lastpaytime">
+							<span class="help-block m-b-none">最后的还款时间</span>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">总盈利：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="income" value="{$info.income}" name="income" class="form-control" placeholder="请输入总盈利">
+						</div>
+					</div>
+				<!-- form end -->
+				</div>
+			</div>
+			<div class="hr-line-dashed"></div>
+			<div class="row btn-group-m-t">
+				<div class="col-sm-9 col-sm-offset-1">
+					<button type="button" class="btn btn-primary" onclick="CodeInfoDlg.update()" id="ensure">
+						<i class="fa fa-check"></i>&nbsp;确认提交
+					</button>
+					<button type="button" class="btn btn-danger" onclick="CodeInfoDlg.close()" id="cancel">
+						<i class="fa fa-eraser"></i>&nbsp;取消
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="__PUBLIC__/static/js/upload.js" charset="utf-8"></script>
+<script src="__PUBLIC__/static/js/plugins/layui/layui.js" charset="utf-8"></script>
+<script>
+layui.use(['form'],function(){});
+laydate.render({elem: '#addtime',type: 'datetime',trigger:'click'});
+laydate.render({elem: '#updateline',type: 'datetime',trigger:'click'});
+laydate.render({elem: '#paytime',type: 'datetime',trigger:'click'});
+laydate.render({elem: '#lastpaytime',type: 'datetime',trigger:'click'});
+var CodeInfoDlg = {
+	CodeInfoData: {},
+	validateFields: {
+	 }
+}
+
+CodeInfoDlg.collectData = function () {
+	this.set('id').set('mobile').set('memberid').set('title').set('money').set('type').set('ordernumber').set('addtime').set('updateline').set('status').set('parentid').set('paystatus').set('paytime').set('lastpaytime').set('income');
+};
+
+CodeInfoDlg.update = function () {
+	 this.clearData();
+	 this.collectData();
+	 if (!this.validate()) {
+	 	return;
+	 }
+	 var ajax = new $ax(Feng.ctxPath + "/Bill/update", function (data) {
+	 	if ('00' === data.status) {
+	 		Feng.success(data.msg,1000);
+	 		window.parent.CodeGoods.table.refresh();
+	 		CodeInfoDlg.close();
+	 	} else {
+	 		Feng.error(data.msg + "！",1000);
+		 }
+	 })
+	 ajax.set(this.CodeInfoData);
+	 ajax.start();
+};
+
+
+</script>
+<script src="__PUBLIC__/static/js/base.js" charset="utf-8"></script>
+{/block}

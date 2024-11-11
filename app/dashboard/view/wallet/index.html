@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+    <title>Dashboard - daisySMS</title>
+
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/static/css/_main.css?v=f90b0b14e89c3f9d28d64d85d8b45148">
+
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/static/css/_notie.min.css">
+
+
+    <script src="__PUBLIC__/static/js/jquery.min.js?v=2.1.4"></script>
+    <script src="__PUBLIC__/static/js/bootstrap.min.js?v=3.3.6"></script>
+    <script src="__PUBLIC__/static/js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
+    <script src="__PUBLIC__/static/js/plugins/validate/bootstrapValidator.min.js"></script>
+    <script src="__PUBLIC__/static/js/plugins/validate/zh_CN.js"></script>
+    <script src="__PUBLIC__/static/js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
+    <script src="__PUBLIC__/static/js/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+    <script src="__PUBLIC__/static/js/plugins/layer/layer.min.js"></script>
+    <script src="__PUBLIC__/static/js/plugins/layer/laydate/laydate.js"></script>
+    <script src="__PUBLIC__/static/js/common/ajax-object.js?v=<?php echo rand(1000,9999)?>"></script>
+    <script src="__PUBLIC__/static/js/common/bootstrap-table-object.js"></script>
+    <script src="__PUBLIC__/static/js/common/Feng.js"></script>
+    <script src="__PUBLIC__/static/js/plugins/webuploader/webuploader.min.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/static/js/ueditor/ueditor.config.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/static/js/ueditor/ueditor.all.min.js"> </script>
+    <script type="text/javascript" src="__PUBLIC__/static/js/xheditor/xheditor-1.2.2.min.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/static/js/xheditor/xheditor_lang/zh-cn.js"></script>
+
+    <style>.notie-container {z-index: 20;}</style>
+
+    <style>
+        .phone::before {
+            content: "+1 ";
+            user-select: none;
+            opacity: 0.5;
+        }
+        td[data-field="name"] {
+            max-width: 300px; /* 设置最大宽度 */
+            word-wrap: break-word; /* 启用自动换行 */
+            white-space: normal; /* 确保换行生效 */
+        }
+    </style>
+
+</head>
+<body data-theme="light">
+
+<!--左侧导航开始-->
+{include file="common/__top"}
+<!--左侧导航结束-->
+
+<div class="py-8"></div>
+
+<div class="flex flex-col lg:flex-row h-full">
+
+    <!--左侧导航开始-->
+    {include file="common/__left"}
+    <!--左侧导航结束-->
+
+    <div class="flex w-full justify-center bg-base-200">
+        <div class="flex flex-col gap-6 my-6 w-full lg:w-3/4 w-3/4 2xl:w-1/2">
+            <div class="flex flex-row gap-2">
+                <div class="bg-success text-accent-content rounded-box flex items-center p-4 border">
+                    <div class="flex-1 px-2">
+                        <h2 class="text-3xl font-extrabold">${$umoney}</h2>
+                        <p class="text-sm text-opacity-80">Current balance</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="grid" id="tabs">
+                <div class="tabs -mb-px z-10">
+                    <a data-for="deposit" class="tab tab-lg tab-lifted tab-active">
+                        Credit
+                        <span class="hidden md:inline">&nbsp;money</span>
+                    </a>
+
+                    <a data-for="transfer-tab" class="tab tab-lg tab-lifted">Transfer</a>
+
+                    <a data-for="redeem-tab" class="tab tab-lg tab-lifted">
+                        Redeem
+                        <span class="hidden md:inline">&nbsp;promocode</span>
+                    </a>
+                </div>
+
+                <div class="bg-base-100 rounded-b-box rounded-tr-box relative overflow-x-auto">
+                    <div data-tab="deposit" class="border card-body">
+                        <form id="pay" action="javascript:void(0);" method="post" data-gtm-form-interact-id="0">
+                            <h2 class="card-title mb-2">Add money to your wallet</h2>
+
+                            <div class="flex flex-col sm:flex-row items-center">
+                                <label class="input-group w-72">
+                                    <span>Amount,&nbsp;USD</span>
+                                    <input id="amount" name="amount" type="number" min="20" max="150" step="10" class="input input-bordered w-full" placeholder="100" required="" autofocus="">
+                                </label>
+                            </div>
+
+                            <div class="mt-4 mb-2 text-stone-500">Payment method:</div>
+
+                            <div id="methods" class="flex flex-col gap-1 select-none">
+
+
+
+
+
+
+
+
+
+                                <div class="grid grid-cols-3 xl:grid-cols-4 gap-1">
+                                    <div class="border rounded">
+                                        <input id="USDT-TRON" type="radio" value="USDT-TRON" class="peer hidden" name="method" data-crypto="true">
+
+                                        <label class="block p-4 cursor-pointer rounded peer-checked:ring-2 peer-checked:ring-emerald-400" for="USDT-TRON">
+                                            USD 20.00
+                                        </label>
+                                    </div>
+                                    <div class="border rounded">
+                                        <input id="TRX-TRON" type="radio" value="TRX-TRON" class="peer hidden" name="method" data-crypto="true" data-gtm-form-interact-field-id="0">
+
+                                        <label class="block p-4 cursor-pointer rounded peer-checked:ring-2 peer-checked:ring-emerald-400" for="TRX-TRON">
+                                            USD 30.00
+                                        </label>
+                                    </div>
+                                    <div class="border rounded">
+                                        <input id="BTC-BTC" type="radio" value="BTC-BTC" class="peer hidden" name="method" data-crypto="true">
+
+                                        <label class="block p-4 cursor-pointer rounded peer-checked:ring-2 peer-checked:ring-emerald-400" for="BTC-BTC">
+                                            USD 40.00
+                                        </label>
+                                    </div>
+                                    <div class="border rounded">
+                                        <input id="LTC-LTC" type="radio" value="LTC-LTC" class="peer hidden" name="method" data-crypto="true">
+
+                                        <label class="block p-4 cursor-pointer rounded peer-checked:ring-2 peer-checked:ring-emerald-400" for="LTC-LTC">
+                                            USD 50.00
+                                        </label>
+                                    </div>
+                                    <div class="border rounded">
+                                        <input id="USDT-POLYGON" type="radio" value="USDT-POLYGON" class="peer hidden" name="method" data-crypto="true">
+
+                                        <label class="block p-4 cursor-pointer rounded peer-checked:ring-2 peer-checked:ring-emerald-400" for="USDT-POLYGON">
+                                            USD 60.00
+                                        </label>
+                                    </div>
+                                    <div class="border rounded">
+                                        <input id="DOGE-DOGE" type="radio" value="DOGE-DOGE" class="peer hidden" name="method" data-crypto="true">
+
+                                        <label class="block p-4 cursor-pointer rounded peer-checked:ring-2 peer-checked:ring-emerald-400" for="DOGE-DOGE">
+                                            USD 70.00
+                                        </label>
+                                    </div>
+                                    <div class="border rounded">
+                                        <input id="ETH-ETH" type="radio" value="ETH-ETH" class="peer hidden" name="method" data-crypto="true">
+
+                                        <label class="block p-4 cursor-pointer rounded peer-checked:ring-2 peer-checked:ring-emerald-400" for="ETH-ETH">
+                                            USD 80.00
+                                        </label>
+                                    </div>
+                                    <div class="border rounded">
+                                        <input id="USDC-ETH" type="radio" value="USDC-ETH" class="peer hidden" name="method" data-crypto="true">
+
+                                        <label class="block p-4 cursor-pointer rounded peer-checked:ring-2 peer-checked:ring-emerald-400" for="USDC-ETH">
+                                            USD 90.00
+                                        </label>
+                                    </div>
+                                    <div class="border rounded">
+                                        <input id="USDC-TRON" type="radio" value="USDC-TRON" class="peer hidden" name="method" data-crypto="true">
+
+                                        <label class="block p-4 cursor-pointer rounded peer-checked:ring-2 peer-checked:ring-emerald-400" for="USDC-TRON">
+                                            USD 100.00
+                                        </label>
+                                    </div>
+                                    <div class="border rounded">
+                                        <input id="BCH-BCH" type="radio" value="BCH-BCH" class="peer hidden" name="method" data-crypto="true">
+
+                                        <label class="block p-4 cursor-pointer rounded peer-checked:ring-2 peer-checked:ring-emerald-400" for="BCH-BCH">
+                                            USD 110.00
+                                        </label>
+                                    </div>
+                                    <div class="border rounded">
+                                        <input id="XMR-XMR" type="radio" value="XMR-XMR" class="peer hidden" name="method" data-crypto="true">
+
+                                        <label class="block p-4 cursor-pointer rounded peer-checked:ring-2 peer-checked:ring-emerald-400" for="XMR-XMR">
+                                            USD 120.00
+                                        </label>
+                                    </div>
+                                    <div class="border rounded">
+                                        <input id="TON-TON" type="radio" value="TON-TON" class="peer hidden" name="method" data-crypto="true">
+
+                                        <label class="block p-4 cursor-pointer rounded peer-checked:ring-2 peer-checked:ring-emerald-400" for="TON-TON">
+                                            USD 130.00
+                                        </label>
+                                    </div>
+                                    <div class="border rounded">
+                                        <input id="USDT-TON" type="radio" value="USDT-TON" class="peer hidden" name="method" data-crypto="true">
+
+                                        <label class="block p-4 cursor-pointer rounded peer-checked:ring-2 peer-checked:ring-emerald-400" for="USDT-TON">
+                                            USD 140.00
+                                        </label>
+                                    </div>
+                                    <div class="border rounded">
+                                        <input id="USDT-BSC" type="radio" value="USDT-BSC" class="peer hidden" name="method" data-crypto="true">
+
+                                        <label class="block p-4 cursor-pointer rounded peer-checked:ring-2 peer-checked:ring-emerald-400" for="USDT-BSC">
+                                            USD 150.00
+                                        </label>
+                                    </div>
+                                    <div class="border rounded hidden">
+                                        <input id="SOL-SOL" type="radio" value="SOL-SOL" class="peer hidden" name="method" data-crypto="true">
+
+                                        <label class="block p-4 cursor-pointer rounded peer-checked:ring-2 peer-checked:ring-emerald-400" for="SOL-SOL">
+                                            USD 20.00
+                                        </label>
+                                    </div>
+                                    <div class="border rounded hidden">
+                                        <input id="USDT-ETH" type="radio" value="USDT-ETH" class="peer hidden" name="method" data-crypto="true">
+
+                                        <label class="block p-4 cursor-pointer rounded peer-checked:ring-2 peer-checked:ring-emerald-400" for="USDT-ETH">
+                                            USDT ETH
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button id="btn-credit" class="btn btn-success gap-2 mt-4">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-circle"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                                Proceed to Payment
+                            </button>
+
+                            <div class="text-stone-500 mt-4">
+                                <p>Money is only used if you receive the SMS code. Please contact support to add a payment method.</p>
+                            </div>
+
+                            <div id="confirmation_modal" class="modal">
+                                <div class="modal-box w-3/4 lg:w-1/2 xl:w-1/3 max-w-none">
+                                    <div id="response-container" class="flex flex-col gap-4"></div>
+
+                                    <p class="mt-4">
+                                        By using this payment method you agree to
+                                        <a class="link" target="_blank" href="/docs/card-payment-info">Card Payment Rules</a>
+                                    </p>
+
+                                    <div class="modal-action mt-8">
+                                        <label class="btn btn-success accept">Accept</label>
+                                        <label class="btn close">Close</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div id="transfer" data-tab="transfer-tab" class="border card-body hidden">
+                        <h2 class="card-title mb-2">Transfer money to a different account</h2>
+
+                        <span>Balance transfers are currently disabled for your account.</span>
+                        <span>You can enable them by pressing the button below.</span>
+                        <span>We recommend that you don't enable this feature unless you plan to use it.</span>
+
+                        <button id="enable_transfers" class="btn btn-success gap-2 mt-4 py-2 h-auto">
+                            <span>Enable balance transfers</span>
+                        </button>
+                    </div>
+
+                    <div id="redeem" data-tab="redeem-tab" class="border card-body hidden">
+                        <h2 class="card-title mb-2">Redeem promocode</h2>
+
+                        <div class="flex flex-row gap-4">
+                            <label class="input-group ">
+                                <span>Promocode</span>
+                                <input name="promocode" type="text" class="input input-bordered w-full" required="">
+                            </label>
+                        </div>
+
+                        <button class="btn btn-success gap-2 mt-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right-circle"><circle cx="12" cy="12" r="10"></circle><polyline points="12 16 16 12 12 8"></polyline><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+                            Redeem promocode
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <template id="unlisted_notice">
+        <div class="text-left inline-block">
+            <div>Unlisted service will reserve the number for you.</div>
+            <div>As soon as a new SMS comes, we'll give you the entire text.</div>
+            <div>This will not work for listed services.</div>
+            <div>We don't work with any banking or dating services.</div>
+
+            <label class="cursor-pointer flex items-center text-sm mt-4">
+                <input id="unlisted_notice_no_show" type="checkbox" class="checkbox mr-2" />
+                <span>Don't show this message again</span>
+            </label>
+        </div>
+    </template>
+
+    <template id="first_use_notice">
+        <div class="text-left inline-block">
+            <div class="my-6">
+                We recommend reading
+                <a href="/docs/howto" class="link" target="_blank">this short guide</a>
+                on how to successfully use this service.
+            </div>
+
+            <div class="my-6">Main takeaway: avoid using free VPN apps.</div>
+
+            <label class="cursor-pointer flex items-center text-sm mt-4">
+                <input id="first_use_notice_no_show" type="checkbox" class="checkbox mr-2" />
+                <span>Don't show this message again</span>
+            </label>
+        </div>
+    </template>
+
+    <template id="cancel_notice">
+        <p>Do you want to cancel this rental? Your balance will be unlocked.</p>
+    </template>
+
+    <div class="modal" id="carrier-info">
+        <div class="modal-box w-1/2">
+            <h3 class="font-bold text-lg">Why choose carrier</h3>
+            <p class="py-4">There are 3 carriers in the USA: T-Mobile (tmo), Verizon (vz), and AT&T (att). </p>
+            <p>If you're experiencing issues on services like Tinder, where it says an account already exists, we recommend you try Verizon, or AT&T.</p>
+            <div class="modal-action">
+                <a href="#" class="btn">OK</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">External Page</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <iframe id="modalIframe" src="" width="100%" height="500px" frameborder="0"></iframe>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<button type="button" onclick="CodeGoods.update(4293)" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+<script>
+    var CodeGoods = {id: "CodeGoodsTable",seItem: null,table: null,layerIndex: -1};
+    CodeGoods.update = function (value) {
+        if(value){
+            var index = layer.open({type: 2,title: '修改',area: ['800px', '400px'],fix: false, maxmin: true,content: Feng.ctxPath + '/dashboard/wallet/charge?id='+value});
+            // var index = layer.open({type: 2,title: '修改',area: ['800px', '400px'],fix: false, maxmin: true,content:   +'http://baidu.com/?id='+value});
+            if(!IsPC()){layer.full(index)}
+        }else{
+            if (this.check()) {
+                var idx = '';
+                $.each(CodeGoods.seItem, function() {
+                    idx += ',' + this.id;
+                });
+                idx = idx.substr(1);
+                if(idx.indexOf(",") !== -1){
+                    Feng.info("请选择单条数据！");
+                    return false;
+                }
+                var index = layer.open({type: 2,title: '修改',area: ['800px', '400px'],fix: false, maxmin: true,content: Feng.ctxPath + '/MemberYzm/update?id='+idx});
+                this.layerIndex = index;
+                if(!IsPC()){layer.full(index)}
+            }
+        }
+    }
+
+    $(document).ready(function() {
+        $('.tab').on('click', function() {
+            // 移除所有标签的活动状态
+            $('.tab').removeClass('tab-active');
+
+            // 添加活动状态到当前标签
+            $(this).addClass('tab-active');
+
+            // 获取要显示的标签对应的内容
+            const tabId = $(this).data('for');
+            console.log(tabId)
+            // 隐藏所有内容
+            $('.border.card-body').addClass('hidden');
+
+            // 显示对应的内容
+            $(`div[data-tab="${tabId}"]`).removeClass('hidden');
+        });
+
+        $('input[name="method"]').on('change', function() {
+            if ($(this).is(':checked')) {
+                // 获取选中的 radio 对应的 label 的文本内容
+                const selectedLabel = $(`label[for="${$(this).attr('id')}"]`).text().trim();
+                let match = selectedLabel.match(/(\d+\.\d+)/);
+                if (match) {
+                    var amount = parseFloat(match[0]);
+                    $('#amount').val(amount);
+                    console.log(amount);  // 输出: 60.00
+                }
+
+            }
+        });
+        //  var amount = $('#amount').val();
+        // console.log('t',amount)
+        $('#btn-credit').on('click', function() {
+            let isAmount = $('#amount').val();
+            if(isAmount == ''){
+                return;
+            }
+            var url = Feng.ctxPath + "/Dashboard/wallet/charge"; // 你想打开的页面 URL
+            window.open(url, '_blank'); // _blank 表示在新标签页中打开
+            // var ajax = new $ax(Feng.ctxPath + "/Dashboard/wallet/index", function (data) {
+            //     console.log(data)
+            //     openModalWithIframe("http://www.baidu.com");
+            //     // if ('00' === data.status) {
+            //     //     Feng.success(data.msg);
+            //     //     CodeGoods.table.refresh();
+            //     // } else {
+            //     //     // Feng.error(data.msg);
+            //     // }
+            // });
+            // ajax.set('amount', isAmount);
+            // ajax.start();
+
+        });
+    });
+    function openModalWithIframe(url) {
+        $('#modalIframe').attr('src', url);  // 设置 iframe 的 src 属性
+        $('#myModal').modal('show');  // 打开模态框
+    }
+</script>
+<!--左侧导航开始-->
+{include file="common/__footer"}
+<!--左侧导航结束-->
+
+<script src="https://unpkg.com/notie@4.3.1/dist/notie.min.js"></script>
+
+
+</body>

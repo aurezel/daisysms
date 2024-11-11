@@ -1,0 +1,144 @@
+{extend name='common/_container'}
+{block name="content"}
+<div class="ibox float-e-margins">
+	<div class="ibox-content">
+		<div class="form-horizontal" id="CodeInfoForm">
+			<div class="row">
+				<div class="col-sm-12">
+				<!-- form start -->
+					<div class="form-group">
+						<label class="col-sm-2 control-label">接受者id：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="uto" value="" name="uto" class="form-control" placeholder="请输入接受者id">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">接受者名称：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="toname" value="" name="toname" class="form-control" placeholder="请输入接受者名称">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">客服id：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="ufrom" value="" name="ufrom" class="form-control" placeholder="请输入客服id">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">客服名称：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="fromname" value="" name="fromname" class="form-control" placeholder="请输入客服名称">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">内容：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="content" value="{$info.content}" name="content" class="form-control" placeholder="请输入内容">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">类型：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="type" value="{$info.type}" name="type" class="form-control" placeholder="请输入类型">
+						</div>
+					</div>
+					<div class="form-group layui-form">
+						<label class="col-sm-2 control-label">类型2：</label>
+						<div class="col-sm-9">
+							<?php if(!isset($info['sub_type'])){ $info['sub_type'] = 'message'; }; ?>
+							<input name="sub_type" value="message" type="radio" {if condition="$info.sub_type eq 'message'"}checked{/if} title="消息">
+							<input name="sub_type" value="notice" type="radio" {if condition="$info.sub_type eq 'notice'"}checked{/if} title="通知">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">添加时间：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" value="{:date('Y-m-d H:i:s')}" name="timestamp"  placeholder="请输入添加时间" class="form-control" id="timestamp">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">消息类型：</label>
+						<div class="col-sm-9">
+							<?php if(!isset($info['message_type'])){ $info['message_type'] = ''; }; ?>
+							<select lay-ignore name="message_type" class="form-control" id="message_type">
+								<option value="">请选择</option>
+								<option value="1" {if condition="$info.message_type eq '1'"}selected{/if}>文本</option>
+								<option value="2" {if condition="$info.message_type eq '2'"}selected{/if}>图片</option>
+								<option value="3" {if condition="$info.message_type eq '3'"}selected{/if}>表情</option>
+								<option value="4" {if condition="$info.message_type eq '4'"}selected{/if}>语音</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">options：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="options" value="{$info.options}" name="options" class="form-control" placeholder="请输入options">
+						</div>
+					</div>
+					<div class="form-group layui-form">
+						<label class="col-sm-2 control-label">isread：</label>
+						<div class="col-sm-9">
+							<?php if(!isset($info['isread'])){ $info['isread'] = 0; }; ?>
+							<input name="isread" value="1" type="radio" {if condition="$info.isread eq '1'"}checked{/if} title="已读">
+							<input name="isread" value="0" type="radio" {if condition="$info.isread eq '0'"}checked{/if} title="未读">
+						</div>
+					</div>
+				<!-- form end -->
+				</div>
+			</div>
+			<div class="hr-line-dashed"></div>
+			<div class="row btn-group-m-t">
+				<div class="col-sm-9 col-sm-offset-1">
+					<button type="button" class="btn btn-primary" onclick="CodeInfoDlg.add()" id="ensure">
+						<i class="fa fa-check"></i>&nbsp;确认提交
+					</button>
+					<button type="button" class="btn btn-danger" onclick="CodeInfoDlg.close()" id="cancel">
+						<i class="fa fa-eraser"></i>&nbsp;取消
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="__PUBLIC__/static/js/upload.js" charset="utf-8"></script>
+<script src="__PUBLIC__/static/js/plugins/layui/layui.js" charset="utf-8"></script>
+<script>
+layui.use(['form'],function(){});
+laydate.render({elem: '#timestamp',type: 'datetime',trigger:'click'});
+var CodeInfoDlg = {
+	CodeInfoData: {},
+	validateFields: {
+	 }
+}
+
+CodeInfoDlg.collectData = function () {
+	this.set('mid').set('uto').set('toname').set('ufrom').set('fromname').set('content').set('type').set('timestamp').set('message_type').set('options');
+};
+
+CodeInfoDlg.add = function () {
+	 this.clearData();
+	 this.collectData();
+	 if (!this.validate()) {
+	 	return;
+	 }
+	 var sub_type = $("input[name = 'sub_type']:checked").val();
+	 var isread = $("input[name = 'isread']:checked").val();
+	 var ajax = new $ax(Feng.ctxPath + "/Message/add", function (data) {
+	 	if ('00' === data.status) {
+	 		Feng.success(data.msg,1000);
+	 		window.parent.CodeGoods.table.refresh();
+	 		CodeInfoDlg.close();
+	 	} else {
+	 		Feng.error(data.msg + "！",1000);
+		 }
+	 })
+	 ajax.set('sub_type',sub_type);
+	 ajax.set('isread',isread);
+	 ajax.set(this.CodeInfoData);
+	 ajax.start();
+};
+
+
+</script>
+<script src="__PUBLIC__/static/js/base.js" charset="utf-8"></script>
+{/block}

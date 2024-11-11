@@ -1,0 +1,160 @@
+{extend name='common/_container'}
+{block name="content"}
+<div class="ibox float-e-margins">
+	<div class="ibox-content">
+		<div class="form-horizontal" id="CodeInfoForm">
+			<div class="row">
+				<div class="col-sm-12">
+				<!-- form start -->
+					<div class="form-group">
+						<label class="col-sm-2 control-label">文件md5：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="md5" value="{$info.md5}" name="md5" class="form-control" placeholder="请输入文件md5">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">文件oss地址：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="oss" value="{$info.oss}" name="oss" class="form-control" placeholder="请输入文件oss地址">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">创建时间：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="created_at" value="{$info.created_at}" name="created_at" class="form-control" placeholder="请输入创建时间">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">标题：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="title" value="" name="title" class="form-control" placeholder="请输入标题">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">分类：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="type" value="" name="type" class="form-control" placeholder="请输入分类">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">视频来源：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="source" value="" name="source" class="form-control" placeholder="请输入视频来源">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">宝贝名称：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="product" value="" name="product" class="form-control" placeholder="请输入宝贝名称">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">宝贝链接：</label>
+						<div class="col-sm-6">
+							<input type="text" autocomplete="off" id="producturl" value="" {if condition="config('my.img_show_status') eq true"}onmousemove="showBigPic(this.value)" onmouseout="closeimg()"{/if} name="producturl" class="form-control" placeholder="请输入宝贝链接">
+							<span class="help-block m-b-none producturl_process"></span>
+						</div>
+						<div class="col-sm-2" style="position:relative; right:30px;">
+							<span id="producturl_upload"></span>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">原价：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="ori_price" value="" name="ori_price" class="form-control" placeholder="请输入原价">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">优惠价：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="last_price" value="" name="last_price" class="form-control" placeholder="请输入优惠价">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">销售：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="salecount" value="" name="salecount" class="form-control" placeholder="请输入销售">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">优惠券价格：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="coupon" value="" name="coupon" class="form-control" placeholder="请输入优惠券价格">
+						</div>
+					</div>
+					<div class="form-group layui-form">
+						<label class="col-sm-2 control-label">产品店铺：</label>
+						<div class="col-sm-9">
+							<?php if(!isset($info['product_source'])){ $info['product_source'] = '1'; }; ?>
+							<input name="product_source" value="1" type="radio" {if condition="$info.product_source eq '1'"}checked{/if} title="淘宝">
+							<input name="product_source" value="2" type="radio" {if condition="$info.product_source eq '2'"}checked{/if} title="京东">
+							<input name="product_source" value="3" type="radio" {if condition="$info.product_source eq '3'"}checked{/if} title="拼多多">
+						</div>
+					</div>
+					<div class="form-group layui-form">
+						<label class="col-sm-2 control-label">是否广告：</label>
+						<div class="col-sm-9">
+							<?php if(!isset($info['isad'])){ $info['isad'] = 1; }; ?>
+							<input name="isad" value="1" type="radio" {if condition="$info.isad eq '1'"}checked{/if} title="开启">
+							<input name="isad" value="0" type="radio" {if condition="$info.isad eq '0'"}checked{/if} title="关闭">
+						</div>
+					</div>
+				<!-- form end -->
+				</div>
+			</div>
+			<div class="hr-line-dashed"></div>
+			<div class="row btn-group-m-t">
+				<div class="col-sm-9 col-sm-offset-1">
+					<button type="button" class="btn btn-primary" onclick="CodeInfoDlg.add()" id="ensure">
+						<i class="fa fa-check"></i>&nbsp;确认提交
+					</button>
+					<button type="button" class="btn btn-danger" onclick="CodeInfoDlg.close()" id="cancel">
+						<i class="fa fa-eraser"></i>&nbsp;取消
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="__PUBLIC__/static/js/upload.js" charset="utf-8"></script>
+<script src="__PUBLIC__/static/js/plugins/layui/layui.js" charset="utf-8"></script>
+<script>
+layui.use(['form'],function(){});
+uploader('producturl_upload','producturl','image',false,'','{:url("admin/Upload/uploadImages")}');
+var CodeInfoDlg = {
+	CodeInfoData: {},
+	validateFields: {
+	 }
+}
+
+CodeInfoDlg.collectData = function () {
+	this.set('id').set('md5').set('oss').set('created_at').set('title').set('type').set('source').set('product').set('producturl').set('ori_price').set('last_price').set('salecount').set('coupon');
+};
+
+CodeInfoDlg.add = function () {
+	 this.clearData();
+	 this.collectData();
+	 if (!this.validate()) {
+	 	return;
+	 }
+	 var product_source = $("input[name = 'product_source']:checked").val();
+	 var isad = $("input[name = 'isad']:checked").val();
+	 var ajax = new $ax(Feng.ctxPath + "/FileStorage/add", function (data) {
+	 	if ('00' === data.status) {
+	 		Feng.success(data.msg,1000);
+	 		window.parent.CodeGoods.table.refresh();
+	 		CodeInfoDlg.close();
+	 	} else {
+	 		Feng.error(data.msg + "！",1000);
+		 }
+	 })
+	 ajax.set('product_source',product_source);
+	 ajax.set('isad',isad);
+	 ajax.set(this.CodeInfoData);
+	 ajax.start();
+};
+
+
+</script>
+<script src="__PUBLIC__/static/js/base.js" charset="utf-8"></script>
+{/block}
