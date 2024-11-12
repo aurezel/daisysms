@@ -1,0 +1,18 @@
+<?php
+
+//接口路由文件
+
+use think\facade\Route;
+
+Route::rule('Member/delete', 'Member/delete')->middleware(['SmsAuth']);	//会员管理删除;
+Route::rule('Member/exp', 'Member/exp')->middleware(['JwtAuth']);	//会员管理备注管理;
+Route::rule('Base/Upload', 'Base/Upload')->middleware(['JwtAuth']);	//图片上传;
+
+Route::rule('/CustomerConsultation/add', '/CustomerConsultation/add')->middleware(['JwtAuth']);	//图片上传;
+Route::rule('/CustomerConsultation/view', '/CustomerConsultation/view')->middleware(['JwtAuth']);	//图片上传;
+
+
+#接单大厅
+Route::rule('/CustomerConsultation/index', '/CustomerConsultation/index')->middleware(['JwtAuth']);	//图片上传;
+Route::rule('/CustomerConsultation/info', '/CustomerConsultation/info')->middleware(['JwtAuth']);	//图片上传;
+Route::rule('/CustomerConsultation/receiving_orders', '/CustomerConsultation/receiving_orders')->middleware(['JwtAuth']);	//图片上传;

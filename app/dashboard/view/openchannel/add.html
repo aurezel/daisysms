@@ -1,0 +1,185 @@
+{extend name='common/_container'}
+{block name="content"}
+<div class="ibox float-e-margins">
+	<div class="ibox-content">
+		<div class="form-horizontal" id="CodeInfoForm">
+			<div class="row">
+				<div class="col-sm-12">
+				<!-- form start -->
+					<div class="form-group">
+						<label class="col-sm-2 control-label">渠道最高提成比例：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="maxpaygetpoint" value="70" name="maxpaygetpoint" class="form-control" placeholder="请输入渠道最高提成比例">
+							<span class="help-block m-b-none">整个渠道包括会员上下三级及渠道上下三级的总提成</span>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">输入会员ID：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="member_id" value="" name="member_id" class="form-control" placeholder="请输入输入会员ID">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">复制的会员组ID：</label>
+						<div class="col-sm-9">
+							<?php if(!isset($info['groupid'])){ $info['groupid'] = ''; }; ?>
+							<select lay-ignore name="groupid" class="form-control" id="groupid">
+								<option value="">请选择</option>
+								{sql query="select id,des from cd_tradegroup"}
+									<option value="{$sql.id}" {if condition="$info.groupid eq $sql.id"}selected{/if}>{$sql.des}</option>
+								{/sql}
+							</select>
+							<span class="help-block m-b-none">拷贝此会员组信息</span>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">上级渠道：</label>
+						<div class="col-sm-9">
+							<?php if(!isset($info['twochannel'])){ $info['twochannel'] = ''; }; ?>
+							<select lay-ignore name="twochannel" class="form-control" id="twochannel">
+								<option value="">请选择</option>
+								{sql query="select channel,nick FROM `cd_agent`"}
+									<option value="{$sql.channel}" {if condition="$info.twochannel eq $sql.channel"}selected{/if}>{$sql.nick}</option>
+								{/sql}
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">输入渠道标识：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="channel" value="" name="channel" class="form-control" placeholder="请输入输入渠道标识">
+							<span class="help-block m-b-none">渠道唯一标识，英文开头，小写</span>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">渠道备注：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="nick" value="" name="nick" class="form-control" placeholder="请输入渠道备注">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">下级会员提成设置：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="buyvipset" value="0|0|0" name="buyvipset" class="form-control" placeholder="请输入下级会员提成设置">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">渠道提成比例：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="paygetpoint" value="" name="paygetpoint" class="form-control" placeholder="请输入渠道提成比例">
+							<span class="help-block m-b-none">用于给渠道提成占比</span>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">二级渠道提成比例：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="twopaygetpoint" value="0" name="twopaygetpoint" class="form-control" placeholder="请输入二级渠道提成比例">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">三级渠道提成比例：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="threepaygetpoint" value="0" name="threepaygetpoint" class="form-control" placeholder="请输入三级渠道提成比例">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">强制推荐链接：</label>
+						<div class="col-sm-9">
+							<?php if(!isset($info['checkrebate'])){ $info['checkrebate'] = '1'; }; ?>
+							<select lay-ignore name="checkrebate" class="form-control" id="checkrebate">
+								<option value="">请选择</option>
+								<option value="1" {if condition="$info.checkrebate eq '1'"}selected{/if}>开启</option>
+								<option value="0" {if condition="$info.checkrebate eq '0'"}selected{/if}>关闭</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-group layui-form">
+						<label class="col-sm-2 control-label">开启检测金额：</label>
+						<div class="col-sm-9">
+							<?php if(!isset($info['checkbinance'])){ $info['checkbinance'] = 1; }; ?>
+							<input name="checkbinance" value="1" type="radio" {if condition="$info.checkbinance eq '1'"}checked{/if} title="开启">
+							<input name="checkbinance" value="0" type="radio" {if condition="$info.checkbinance eq '0'"}checked{/if} title="关闭">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">支持交易平台：</label>
+						<div class="col-sm-9">
+							<?php if(!isset($info['tradetype'])){ $info['tradetype'] = ''; }; ?>
+							<select lay-ignore name="tradetype" class="form-control chosen" multiple data-placeholder='请选择支持交易平台'  id="tradetype">
+								<option value="1" {if in_array("1",explode(',',$info.tradetype))}selected{/if}>OKX</option>
+								<option value="0" {if in_array("0",explode(',',$info.tradetype))}selected{/if}>Binance</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">权限设置：</label>
+						<div class="col-sm-9">
+							<?php if(!isset($info['dorule'])){ $info['dorule'] = ''; }; ?>
+							<select lay-ignore name="dorule" class="form-control chosen" multiple data-placeholder='请选择权限设置'  id="dorule">
+								<option value="1" {if in_array("1",explode(',',$info.dorule))}selected{/if}>关闭栏目</option>
+								<option value="2" {if in_array("2",explode(',',$info.dorule))}selected{/if}>审核用户</option>
+								<option value="3" {if in_array("3",explode(',',$info.dorule))}selected{/if}>修改会员时长</option>
+								<option value="4" {if in_array("4",explode(',',$info.dorule))}selected{/if}>清空会员挂单</option>
+								<option value="5" {if in_array("5",explode(',',$info.dorule))}selected{/if}>收益划转给渠道会员</option>
+							</select>
+						</div>
+					</div>
+				<!-- form end -->
+				</div>
+			</div>
+			<div class="hr-line-dashed"></div>
+			<div class="row btn-group-m-t">
+				<div class="col-sm-9 col-sm-offset-1">
+					<button type="button" class="btn btn-primary" onclick="CodeInfoDlg.add()" id="ensure">
+						<i class="fa fa-check"></i>&nbsp;确认提交
+					</button>
+					<button type="button" class="btn btn-danger" onclick="CodeInfoDlg.close()" id="cancel">
+						<i class="fa fa-eraser"></i>&nbsp;取消
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="__PUBLIC__/static/js/upload.js" charset="utf-8"></script>
+<script src="__PUBLIC__/static/js/plugins/layui/layui.js" charset="utf-8"></script>
+<link href='__PUBLIC__/static/js/plugins/chosen/chosen.min.css' rel='stylesheet'/>
+<script src='__PUBLIC__/static/js/plugins/chosen/chosen.jquery.js'></script>
+<script>
+layui.use(['form'],function(){});
+$(function(){$('.chosen').chosen({search_contains: true})})
+var CodeInfoDlg = {
+	CodeInfoData: {},
+	validateFields: {
+	 }
+}
+
+CodeInfoDlg.collectData = function () {
+	this.set('').set('maxpaygetpoint').set('member_id').set('groupid').set('twochannel').set('channel').set('nick').set('buyvipset').set('paygetpoint').set('twopaygetpoint').set('threepaygetpoint').set('checkrebate').set('tradetype').set('dorule');
+};
+
+CodeInfoDlg.add = function () {
+	 this.clearData();
+	 this.collectData();
+	 if (!this.validate()) {
+	 	return;
+	 }
+	 var checkbinance = $("input[name = 'checkbinance']:checked").val();
+	 var ajax = new $ax(Feng.ctxPath + "/Openchannel/add", function (data) {
+	 	if ('00' === data.status) {
+	 		Feng.success(data.msg,1000);
+	 		window.parent.CodeGoods.table.refresh();
+	 		CodeInfoDlg.close();
+	 	} else {
+	 		Feng.error(data.msg + "！",1000);
+		 }
+	 })
+	 ajax.set('checkbinance',checkbinance);
+	 ajax.set(this.CodeInfoData);
+	 ajax.start();
+};
+
+
+</script>
+<script src="__PUBLIC__/static/js/base.js" charset="utf-8"></script>
+{/block}

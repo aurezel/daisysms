@@ -1,0 +1,161 @@
+{extend name='common/_container'}
+{block name="content"}
+<div class="ibox float-e-margins">
+<input type="hidden" name='id' id='id' value="{$info.id}" />
+	<div class="ibox-content">
+		<div class="form-horizontal" id="CodeInfoForm">
+			<div class="row">
+				<div class="col-sm-12">
+				<!-- form start -->
+					<div class="form-group">
+						<label class="col-sm-2 control-label">活动标题：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="title" value="{$info.title}" name="title" class="form-control" placeholder="请输入活动标题">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">活动简介：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="des" value="{$info.des}" name="des" class="form-control" placeholder="请输入活动简介">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">赠送会员天数：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="hyday" value="{$info.hyday}" name="hyday" class="form-control" placeholder="请输入赠送会员天数">
+							<span class="help-block m-b-none">送7天就写7，单位是天</span>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">赚送账户额度：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="money" value="{$info.money}" name="money" class="form-control" placeholder="请输入赚送账户额度">
+							<span class="help-block m-b-none">如送10U，就填写10</span>
+						</div>
+					</div>
+					<div class="form-group layui-form">
+						<label class="col-sm-2 control-label">活动状态：</label>
+						<div class="col-sm-9">
+							<?php if(!isset($info['status'])){ $info['status'] = 1; }; ?>
+							<input name="status" value="1" type="radio" {if condition="$info.status eq '1'"}checked{/if} title="开启">
+							<input name="status" value="0" type="radio" {if condition="$info.status eq '0'"}checked{/if} title="关闭">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">活动开始时间：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" value="{if condition="$info.starttime neq ''"}{$info.starttime|date='Y-m-d H:i:s'}{/if}" name="starttime"  placeholder="请输入活动开始时间" class="form-control" id="starttime">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">活动结束时间：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" value="{if condition="$info.endtime neq ''"}{$info.endtime|date='Y-m-d H:i:s'}{/if}" name="endtime"  placeholder="请输入活动结束时间" class="form-control" id="endtime">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">支持渠道：</label>
+						<div class="col-sm-9">
+							<select lay-ignore name="groupset" class="form-control chosen" multiple data-placeholder='请选择支持渠道'  id="groupset">
+								{sql query="SELECT channel,nick FROM `cd_agent`"}
+									<option value="{$sql.channel}" {if in_array($sql.channel,explode(',',$info['groupset']))}selected{/if}>{$sql.nick}</option>
+								{/sql}
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">支持新旧用户：</label>
+						<div class="col-sm-9">
+							<select lay-ignore name="mtype" class="form-control" id="mtype">
+								<option value="">请选择</option>
+								<option value="1" {if condition="$info.mtype eq '1'"}selected{/if}>新用户</option>
+								<option value="2" {if condition="$info.mtype eq '2'"}selected{/if}>旧用户</option>
+								<option value="3" {if condition="$info.mtype eq '3'"}selected{/if}>新旧用户</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">活动场景：</label>
+						<div class="col-sm-9">
+							<select lay-ignore name="hdmodule" class="form-control" id="hdmodule">
+								<option value="">请选择</option>
+								<option value="1" {if condition="$info.hdmodule eq '1'"}selected{/if}>注册新用户</option>
+								<option value="2" {if condition="$info.hdmodule eq '2'"}selected{/if}>推荐新用户</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">活动次数：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="actnumber" value="{$info.actnumber}" name="actnumber" class="form-control" placeholder="请输入活动次数">
+							<span class="help-block m-b-none">可以做多少次直接填写</span>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">单个下级用户限一次：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="oneuser" value="{$info.oneuser}" name="oneuser" class="form-control" placeholder="请输入单个下级用户限一次">
+							<span class="help-block m-b-none">如推荐会员一个下级只一次有效果和上面的无限次数配合</span>
+						</div>
+					</div>
+				<!-- form end -->
+				</div>
+			</div>
+			<div class="hr-line-dashed"></div>
+			<div class="row btn-group-m-t">
+				<div class="col-sm-9 col-sm-offset-1">
+					<button type="button" class="btn btn-primary" onclick="CodeInfoDlg.update()" id="ensure">
+						<i class="fa fa-check"></i>&nbsp;确认提交
+					</button>
+					<button type="button" class="btn btn-danger" onclick="CodeInfoDlg.close()" id="cancel">
+						<i class="fa fa-eraser"></i>&nbsp;取消
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="__PUBLIC__/static/js/upload.js" charset="utf-8"></script>
+<script src="__PUBLIC__/static/js/plugins/layui/layui.js" charset="utf-8"></script>
+<link href='__PUBLIC__/static/js/plugins/chosen/chosen.min.css' rel='stylesheet'/>
+<script src='__PUBLIC__/static/js/plugins/chosen/chosen.jquery.js'></script>
+<script>
+layui.use(['form'],function(){});
+$(function(){$('.chosen').chosen({search_contains: true})})
+laydate.render({elem: '#starttime',type: 'datetime',trigger:'click'});
+laydate.render({elem: '#endtime',type: 'datetime',trigger:'click'});
+var CodeInfoDlg = {
+	CodeInfoData: {},
+	validateFields: {
+	 }
+}
+
+CodeInfoDlg.collectData = function () {
+	this.set('id').set('title').set('des').set('hyday').set('money').set('starttime').set('endtime').set('groupset').set('mtype').set('hdmodule').set('actnumber').set('oneuser');
+};
+
+CodeInfoDlg.update = function () {
+	 this.clearData();
+	 this.collectData();
+	 if (!this.validate()) {
+	 	return;
+	 }
+	 var status = $("input[name = 'status']:checked").val();
+	 var ajax = new $ax(Feng.ctxPath + "/Activelist/update", function (data) {
+	 	if ('00' === data.status) {
+	 		Feng.success(data.msg,1000);
+	 		window.parent.CodeGoods.table.refresh();
+	 		CodeInfoDlg.close();
+	 	} else {
+	 		Feng.error(data.msg + "！",1000);
+		 }
+	 })
+	 ajax.set('status',status);
+	 ajax.set(this.CodeInfoData);
+	 ajax.start();
+};
+
+
+</script>
+<script src="__PUBLIC__/static/js/base.js" charset="utf-8"></script>
+{/block}

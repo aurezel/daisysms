@@ -1,0 +1,104 @@
+{extend name='common/_container'}
+{block name="content"}
+<div class="ibox float-e-margins">
+<input type="hidden" name='id' id='id' value="{$info.id}" />
+	<div class="ibox-content">
+		<div class="form-horizontal" id="CodeInfoForm">
+			<div class="row">
+				<div class="col-sm-12">
+				<!-- form start -->
+					<div class="form-group">
+						<label class="col-sm-2 control-label">会员名称：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="memberid" value="{$info.memberid}" name="memberid" class="form-control" placeholder="请输入会员名称">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">会员名称：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="membername" value="{$info.membername}" name="membername" class="form-control" placeholder="请输入会员名称">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">发起时间：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" value="{if condition="$info.addtime neq ''"}{$info.addtime|date='Y-m-d H:i:s'}{/if}" name="addtime"  placeholder="请输入发起时间" class="form-control" id="addtime">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">内容：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="content" value="{$info.content}" name="content" class="form-control" placeholder="请输入内容">
+						</div>
+					</div>
+					<div class="form-group layui-form">
+						<label class="col-sm-2 control-label">状态：</label>
+						<div class="col-sm-9">
+							<?php if(!isset($info['status'])){ $info['status'] = 1; }; ?>
+							<input name="status" value="1" type="radio" {if condition="$info.status eq '1'"}checked{/if} title="开启">
+							<input name="status" value="0" type="radio" {if condition="$info.status eq '0'"}checked{/if} title="关闭">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">接单客服：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="customerid" value="{$info.customerid}" name="customerid" class="form-control" placeholder="请输入接单客服">
+						</div>
+					</div>
+				<!-- form end -->
+				</div>
+			</div>
+			<div class="hr-line-dashed"></div>
+			<div class="row btn-group-m-t">
+				<div class="col-sm-9 col-sm-offset-1">
+					<button type="button" class="btn btn-primary" onclick="CodeInfoDlg.update()" id="ensure">
+						<i class="fa fa-check"></i>&nbsp;确认提交
+					</button>
+					<button type="button" class="btn btn-danger" onclick="CodeInfoDlg.close()" id="cancel">
+						<i class="fa fa-eraser"></i>&nbsp;取消
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="__PUBLIC__/static/js/upload.js" charset="utf-8"></script>
+<script src="__PUBLIC__/static/js/plugins/layui/layui.js" charset="utf-8"></script>
+<script>
+layui.use(['form'],function(){});
+laydate.render({elem: '#addtime',type: 'datetime',trigger:'click'});
+var CodeInfoDlg = {
+	CodeInfoData: {},
+	validateFields: {
+	 }
+}
+
+CodeInfoDlg.collectData = function () {
+	this.set('id').set('memberid').set('membername').set('addtime').set('content').set('customerid');
+};
+
+CodeInfoDlg.update = function () {
+	 this.clearData();
+	 this.collectData();
+	 if (!this.validate()) {
+	 	return;
+	 }
+	 var status = $("input[name = 'status']:checked").val();
+	 var ajax = new $ax(Feng.ctxPath + "/Notice/update", function (data) {
+	 	if ('00' === data.status) {
+	 		Feng.success(data.msg,1000);
+	 		window.parent.CodeGoods.table.refresh();
+	 		CodeInfoDlg.close();
+	 	} else {
+	 		Feng.error(data.msg + "！",1000);
+		 }
+	 })
+	 ajax.set('status',status);
+	 ajax.set(this.CodeInfoData);
+	 ajax.start();
+};
+
+
+</script>
+<script src="__PUBLIC__/static/js/base.js" charset="utf-8"></script>
+{/block}

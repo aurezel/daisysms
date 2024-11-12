@@ -1,0 +1,495 @@
+{extend name='common/_container'} {block name="content"}
+<div class="row">
+	<div class="col-sm-12">
+		<div class="ibox float-e-margins">
+			<div class="ibox-content"> 
+				<div class="row row-lg"> 
+					<div class="col-sm-12"> 
+						<div class="row" id="searchGroup">
+							<div class="col-sm-2">
+								<div class="input-group">
+									<div class="input-group-btn">
+										<button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">编号</button>
+									</div>
+									<input type="text" autocomplete="off" class="form-control" id="member_id" placeholder="编号" />
+								</div>
+							</div>
+							<div class="col-sm-2">
+								<div class="input-group">
+									<div class="input-group-btn">
+										<button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">会员名称</button>
+									</div>
+									<input type="text" autocomplete="off" class="form-control" id="membername" placeholder="会员名称" />
+								</div>
+							</div>
+							<div class="col-sm-2">
+								<div class="input-group">
+									<div class="input-group-btn">
+										<button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">性别</button>
+									</div>
+									<select class="form-control" id="sex">
+										<option value="">请选择</option>
+										<option value="1">男</option>
+										<option value="2">女</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-sm-2">
+								<div class="input-group">
+									<div class="input-group-btn">
+										<button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">手机号</button>
+									</div>
+									<input type="text" autocomplete="off" class="form-control" id="mobile" placeholder="手机号" />
+								</div>
+							</div>
+							<div class="col-sm-2">
+								<div class="input-group">
+									<div class="input-group-btn">
+										<button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">U账号余额开始</button>
+									</div>
+									<input type="text" autocomplete="off" placeholder="起始U账号余额" class="form-control layer-date" id="umoney_start">
+								</div>
+							</div>
+							<div class="col-sm-2">
+								<div class="input-group">
+									<div class="input-group-btn">
+										<button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">U账号余额结束</button>
+									</div>
+									<input type="text" autocomplete="off" placeholder="结束U账号余额" class="form-control" id="umoney_end">
+								</div>
+							</div>
+							<div class="col-sm-2">
+								<div class="input-group">
+									<div class="input-group-btn">
+										<button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">上级ID</button>
+									</div>
+									<input type="text" autocomplete="off" class="form-control" id="parentid" placeholder="上级ID" />
+								</div>
+							</div>
+							<div class="col-sm-2">
+								<div class="input-group">
+									<div class="input-group-btn">
+										<button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">会员类型</button>
+									</div>
+									<select class="form-control" id="utype">
+										<option value="">请选择</option>
+										<option value="1">普通会员</option>
+										<option value="2">代理会员</option>
+										<option value="3">团长</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-sm-2">
+								<div class="input-group">
+									<div class="input-group-btn">
+										<button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">会员组</button>
+									</div>
+									<select class="form-control" id="groupid">
+										<option value="">请选择</option>
+										{sql query="select id,des as gname from cd_tradegroup"}
+										<option value="{$sql.id}">{$sql.gname}</option>
+										{/sql}
+									</select>
+								</div>
+							</div>
+							<div class="col-sm-2">
+								<div class="input-group">
+									<div class="input-group-btn">
+										<button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">渠道</button>
+									</div>
+									<input type="text" autocomplete="off" class="form-control" id="channel" placeholder="渠道" />
+								</div>
+							</div>
+							<div class="col-sm-2">
+								<div class="input-group">
+									<div class="input-group-btn">
+										<button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">开启自动扣款</button>
+									</div>
+									<select class="form-control" id="aupay">
+										<option value="">请选择</option>
+										<option value="1">开启</option>
+										<option value="0">关闭</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-sm-2">
+								<div class="input-group">
+									<div class="input-group-btn">
+										<button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">交易所现货资产开始</button>
+									</div>
+									<input type="text" autocomplete="off" placeholder="起始交易所现货资产" class="form-control layer-date" id="spotusdt_start">
+								</div>
+							</div>
+							<div class="col-sm-2">
+								<div class="input-group">
+									<div class="input-group-btn">
+										<button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">交易所现货资产结束</button>
+									</div>
+									<input type="text" autocomplete="off" placeholder="结束交易所现货资产" class="form-control" id="spotusdt_end">
+								</div>
+							</div>
+							<!-- search end -->
+							<div class="col-sm-2">
+								<button type="button" class="btn btn-success " onclick="CodeGoods.search()" id="">
+									<i class="fa fa-search"></i>&nbsp;搜索
+								</button>
+								<button type="button" class="btn" onclick="CodeGoods.reset()" id="">
+									<i class="glyphicon glyphicon-share-alt"></i>&nbsp;重置
+								</button>
+							</div>
+						</div>
+						<div class="btn-group-sm" id="CodeGoodsTableToolbar" role="group">
+						{if condition="in_array('admin/Member/add',session('admin.nodes')) || session('admin.role_id') eq 1"}
+						<button type="button" id="add" class="btn btn-primary button-margin" onclick="CodeGoods.add()">
+						<i class="fa fa-plus"></i>&nbsp;添加
+						</button>
+						{/if}
+						{if condition="in_array('admin/Member/update',session('admin.nodes')) || session('admin.role_id') eq 1"}
+						<button type="button" id="update" class="btn btn-success button-margin" onclick="CodeGoods.update()">
+						<i class="fa fa-pencil"></i>&nbsp;修改
+						</button>
+						{/if}
+						{if condition="in_array('admin/Member/delete',session('admin.nodes')) || session('admin.role_id') eq 1"}
+						<button type="button" id="delete" class="btn btn-danger button-margin" onclick="CodeGoods.delete()">
+						<i class="fa fa-trash"></i>&nbsp;删除
+						</button>
+						{/if}
+						{if condition="in_array('admin/Member/view',session('admin.nodes')) || session('admin.role_id') eq 1"}
+						<button type="button" id="view" class="btn btn-info button-margin" onclick="CodeGoods.view()">
+						<i class="fa fa-plus"></i>&nbsp;查看详情
+						</button>
+						{/if}
+						{if condition="in_array('admin/remark/index',session('admin.nodes')) || session('admin.role_id') eq 1"}
+						<button type="button" id="exp" class="btn btn-primary button-margin" onclick="CodeGoods.exp()">
+						<i class="fa fa-plus"></i>&nbsp;备注管理
+						</button>
+						{/if}
+						</div>
+						<table id="CodeGoodsTable" data-mobile-responsive="true" data-click-to-select="true">
+							<thead><tr><th data-field="selectItem" data-checkbox="true"></th></tr></thead>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+	var CodeGoods = {id: "CodeGoodsTable",seItem: null,table: null,layerIndex: -1};
+
+	CodeGoods.initColumn = function () {
+ 		return [
+ 			{field: 'selectItem', checkbox: true},
+ 			{title: '编号', field: 'member_id', visible: true, align: 'center', valign: 'middle',sortable: true},
+ 			{title: '会员名称', field: 'membername', visible: true, align: 'center', valign: 'middle',sortable: true},
+ 			{title: '性别', field: 'sex', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.sexFormatter},
+ 			{title: '头像', field: 'avatar', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.avatarFormatter},
+ 			{title: '手机号', field: 'mobile', visible: true, align: 'center', valign: 'middle',sortable: true},
+ 			{title: '状态', field: 'status', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.statusFormatter},
+ 			{title: '昵称', field: 'nickname', visible: true, align: 'center', valign: 'middle',sortable: true},
+ 			{title: '注册时间', field: 'regtime', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.regtimeFormatter},
+ 			{title: '登入时间', field: 'logintime', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.logintimeFormatter},
+ 			{title: 'U账号余额', field: 'umoney', visible: true, align: 'center', valign: 'middle',sortable: true},
+ 			{title: '上级ID', field: 'parentid', visible: true, align: 'center', valign: 'middle',sortable: true},
+ 			{title: '会员类型', field: 'utype', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.utypeFormatter},
+ 			{title: '会员组', field: 'groupid', visible: true, align: 'center', valign: 'middle',sortable: true},
+ 			{title: '渠道', field: 'channel', visible: true, align: 'center', valign: 'middle',sortable: true},
+ 			{title: '佣金', field: 'yjmoney', visible: true, align: 'center', valign: 'middle',sortable: true},
+ 			{title: '提现金额', field: 'txmoney', visible: true, align: 'center', valign: 'middle',sortable: true},
+ 			{title: '已用额度', field: 'billmoney', visible: true, align: 'center', valign: 'middle',sortable: true},
+ 			{title: '交易总收益', field: 'trademoney', visible: true, align: 'center', valign: 'middle',sortable: true},
+ 			{title: '盈利率提成比例', field: 'profitpoint', visible: true, align: 'center', valign: 'middle',sortable: true},
+ 			{title: '开启自动扣款', field: 'aupay', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.aupayFormatter},
+ 			{title: '交易所总资产', field: 'usdt', visible: true, align: 'center', valign: 'middle',sortable: true},
+ 			{title: '资产同步时间', field: 'zcuptime', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.zcuptimeFormatter},
+ 			{title: '交易所合约资产', field: 'swapusdt', visible: true, align: 'center', valign: 'middle',sortable: true},
+ 			{title: '交易所现货资产', field: 'spotusdt', visible: true, align: 'center', valign: 'middle',sortable: true},
+ 			{title: '操作', field: '', visible: true, align: 'center', valign: 'middle',formatter: 'CodeGoods.buttonFormatter'},
+ 		];
+ 	};
+
+	CodeGoods.buttonFormatter = function(value,row,index) {
+		if(row.member_id){
+			var str= '';
+			{if condition="in_array('admin/Member/update',session('admin.nodes')) || session('admin.role_id') eq 1"}
+			str += '<button type="button" class="btn btn-success btn-xs" title="修改"  onclick="CodeGoods.update('+row.member_id+')"><i class="fa fa-pencil"></i>&nbsp;修改</button>&nbsp;';
+			{/if}
+			{if condition="in_array('admin/Member/delete',session('admin.nodes')) || session('admin.role_id') eq 1"}
+			str += '<button type="button" class="btn btn-danger btn-xs" title="删除"  onclick="CodeGoods.delete('+row.member_id+')"><i class="fa fa-trash"></i>&nbsp;删除</button>&nbsp;';
+			{/if}
+			return str;
+		}
+	}
+
+	CodeGoods.sexFormatter = function(value,row,index) {
+		if(value !== null){
+			var value = value.toString();
+			switch(value){
+				case '1':
+					return '<span class="label label-success">男</span>';
+				break;
+				case '2':
+					return '<span class="label label-warning">女</span>';
+				break;
+			}
+		}
+	}
+
+	CodeGoods.avatarFormatter = function(value,row,index) {
+		if(value){
+			return "<a href=\"javascript:void(0)\" onclick=\"openImg('"+value+"')\"><img height='30' src="+value+"></a>";	
+		}
+	}
+
+	CodeGoods.statusFormatter = function(value,row,index) {
+		if(value !== null){
+			if(value == 1){
+				return '<input class="mui-switch mui-switch-animbg status'+row.member_id+'" type="checkbox" onclick="CodeGoods.updatestatus('+row.member_id+',0,\'status\')" checked>';
+			}else{
+				return '<input class="mui-switch mui-switch-animbg status'+row.member_id+'" type="checkbox" onclick="CodeGoods.updatestatus('+row.member_id+',1,\'status\')">';
+			}
+		}
+	}
+
+
+	CodeGoods.updatestatus = function(pk,value,field) {
+		var ajax = new $ax(Feng.ctxPath + "/Member/updateExt", function (data) {
+			if ('00' !== data.status) {
+				Feng.error(data.msg);
+				$("."+field+pk).prop("checked",!$("."+field+pk).prop("checked"));
+			}
+		});
+		var val = $("."+field+pk).prop("checked") ? 1 : 0;
+		ajax.set('member_id', pk);
+		ajax.set('status', val);
+		ajax.start();
+	}
+
+	CodeGoods.regtimeFormatter = function(value,row,index) {
+		if(value){
+			return formatDateTime(value,'Y-m-d H:i:s');	
+		}
+	}
+
+	CodeGoods.logintimeFormatter = function(value,row,index) {
+		if(value){
+			return formatDateTime(value,'Y-m-d H:i:s');	
+		}
+	}
+
+	CodeGoods.utypeFormatter = function(value,row,index) {
+		if(value !== null){
+			var value = value.toString();
+			switch(value){
+				case '1':
+					return '<span class="label label-success">普通会员</span>';
+				break;
+				case '2':
+					return '<span class="label label-warning">代理会员</span>';
+				break;
+				case '3':
+					return '<span class="label label-warning">团长</span>';
+				break;
+			}
+		}
+	}
+
+	CodeGoods.aupayFormatter = function(value,row,index) {
+		if(value !== null){
+			if(value == 1){
+				return '<input class="mui-switch mui-switch-animbg aupay'+row.member_id+'" type="checkbox" onclick="CodeGoods.updateaupay('+row.member_id+',0,\'aupay\')" checked>';
+			}else{
+				return '<input class="mui-switch mui-switch-animbg aupay'+row.member_id+'" type="checkbox" onclick="CodeGoods.updateaupay('+row.member_id+',1,\'aupay\')">';
+			}
+		}
+	}
+
+
+	CodeGoods.updateaupay = function(pk,value,field) {
+		var ajax = new $ax(Feng.ctxPath + "/Member/updateExt", function (data) {
+			if ('00' !== data.status) {
+				Feng.error(data.msg);
+				$("."+field+pk).prop("checked",!$("."+field+pk).prop("checked"));
+			}
+		});
+		var val = $("."+field+pk).prop("checked") ? 1 : 0;
+		ajax.set('member_id', pk);
+		ajax.set('aupay', val);
+		ajax.start();
+	}
+
+	CodeGoods.zcuptimeFormatter = function(value,row,index) {
+		if(value){
+			return formatDateTime(value,'Y-m-d H:i:s');	
+		}
+	}
+
+	CodeGoods.formParams = function() {
+		var queryData = {};
+		queryData['offset'] = 0;
+		queryData['member_id'] = $("#member_id").val();
+		queryData['membername'] = $("#membername").val();
+		queryData['sex'] = $("#sex").val();
+		queryData['mobile'] = $("#mobile").val();
+		queryData['umoney_start'] = $("#umoney_start").val();
+		queryData['umoney_end'] = $("#umoney_end").val();
+		queryData['parentid'] = $("#parentid").val();
+		queryData['utype'] = $("#utype").val();
+		queryData['groupid'] = $("#groupid").val();
+		queryData['channel'] = $("#channel").val();
+		queryData['aupay'] = $("#aupay").val();
+		queryData['spotusdt_start'] = $("#spotusdt_start").val();
+		queryData['spotusdt_end'] = $("#spotusdt_end").val();
+		return queryData;
+	}
+
+	CodeGoods.check = function () {
+		var selected = $('#' + this.id).bootstrapTable('getSelections');
+		if(selected.length == 0){
+			Feng.info("请先选中表格中的某一记录！");
+			return false;
+		}else{
+			CodeGoods.seItem = selected;
+			return true;
+		}
+	};
+
+	CodeGoods.add = function (value) {
+		var url = location.search;
+		var index = layer.open({type: 2,title: '添加',area: ['800px', '100%'],fix: false, maxmin: true,content: Feng.ctxPath + '/Member/add'+url});
+		this.layerIndex = index;
+		if(!IsPC()){layer.full(index)}
+	}
+
+
+	CodeGoods.update = function (value) {
+		if(value){
+			var index = layer.open({type: 2,title: '修改',area: ['800px', '100%'],fix: false, maxmin: true,content: Feng.ctxPath + '/Member/update?member_id='+value});
+			if(!IsPC()){layer.full(index)}
+		}else{
+			if (this.check()) {
+				var idx = '';
+				$.each(CodeGoods.seItem, function() {
+					idx += ',' + this.member_id;
+				});
+				idx = idx.substr(1);
+				if(idx.indexOf(",") !== -1){
+					Feng.info("请选择单条数据！");
+					return false;
+				}
+				var index = layer.open({type: 2,title: '修改',area: ['800px', '100%'],fix: false, maxmin: true,content: Feng.ctxPath + '/Member/update?member_id='+idx});
+				this.layerIndex = index;
+				if(!IsPC()){layer.full(index)}
+			}
+		}
+	}
+
+
+	CodeGoods.delete = function (value) {
+		if(value){
+			Feng.confirm("是否删除选中项？", function () {
+				var ajax = new $ax(Feng.ctxPath + "/Member/delete", function (data) {
+					if ('00' === data.status) {
+						Feng.success(data.msg);
+						CodeGoods.table.refresh();
+					} else {
+						Feng.error(data.msg);
+					}
+				});
+				ajax.set('member_id', value);
+				ajax.start();
+			});
+		}else{
+			if (this.check()) {
+				var idx = '';
+				$.each(CodeGoods.seItem, function() {
+					idx += ',' + this.member_id;
+				});
+				idx = idx.substr(1);
+				Feng.confirm("是否删除选中项？", function () {
+					var ajax = new $ax(Feng.ctxPath + "/Member/delete", function (data) {
+						if ('00' === data.status) {
+							Feng.success(data.msg,1000);
+							CodeGoods.table.refresh();
+						} else {
+							Feng.error(data.msg,1000);
+						}
+					});
+					ajax.set('member_id', idx);
+					ajax.start();
+				});
+			}
+		}
+	}
+
+
+	CodeGoods.view = function (value) {
+		if(value){
+			var index = layer.open({type: 2,title: '查看详情',area: ['800px', '100%'],fix: false, maxmin: true,content: Feng.ctxPath + '/Member/view?member_id='+value});
+			if(!IsPC()){layer.full(index)}
+		}else{
+			if (this.check()) {
+				var idx = '';
+				$.each(CodeGoods.seItem, function() {
+					idx += ',' + this.member_id;
+				});
+				idx = idx.substr(1);
+				if(idx.indexOf(",") !== -1){
+					Feng.info("请选择单条数据！");
+					return false;
+				}
+				var index = layer.open({type: 2,title: '查看详情',area: ['800px', '100%'],fix: false, maxmin: true,content: Feng.ctxPath + '/Member/view?member_id='+idx});
+				this.layerIndex = index;
+				if(!IsPC()){layer.full(index)}
+			}
+		}
+	}
+
+
+	CodeGoods.exp = function (value) {
+		if(value){
+			var queryData = {};
+			queryData['member_id'] = value;
+			var index = layer.open({type: 2,title: '备注管理',area: ['850px', '100%'],fix: false, maxmin: true,content: Feng.ctxPath + '/remark/index?'+Feng.parseParam(queryData)});
+			this.layerIndex = index;
+			if(!IsPC()){layer.full(index)}
+		}else{
+			if (this.check()) {
+				var idx = '';
+				$.each(CodeGoods.seItem, function() {
+					idx += ',' + this.member_id;
+				});
+				idx = idx.substr(1);
+				if(idx.indexOf(",") !== -1){
+					Feng.info("请选择单条数据！");
+					return false;
+				}
+				var queryData = {};
+				queryData['member_id'] = idx;
+				var index = layer.open({type: 2,title: '备注管理',area: ['850px', '100%'],fix: false, maxmin: true,content: Feng.ctxPath + '/remark/index?'+Feng.parseParam(queryData)});
+				this.layerIndex = index;
+				if(!IsPC()){layer.full(index)}
+			}
+		}
+	}
+
+
+	CodeGoods.search = function() {
+		CodeGoods.table.refresh({query : CodeGoods.formParams()});
+	};
+
+	CodeGoods.reset = function() {
+		$("#searchGroup input,select").val('');
+		CodeGoods.table.refresh({query : CodeGoods.formParams()});
+	};
+
+	$(function() {
+		var defaultColunms = CodeGoods.initColumn();
+		var url = location.search;
+		var table = new BSTable(CodeGoods.id, Feng.ctxPath+"/Member/index"+url,defaultColunms,20);
+		table.setPaginationType("server");
+		table.setQueryParams(CodeGoods.formParams());
+		CodeGoods.table = table.init();
+	});
+</script>
+{/block}

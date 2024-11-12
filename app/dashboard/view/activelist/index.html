@@ -1,0 +1,372 @@
+{extend name='common/_container'} {block name="content"}
+<div class="row">
+	<div class="col-sm-12">
+		<div class="ibox float-e-margins">
+			<div class="ibox-content"> 
+				<div class="row row-lg"> 
+					<div class="col-sm-12"> 
+						<div class="row" id="searchGroup">
+							<div class="col-sm-2">
+								<div class="input-group">
+									<div class="input-group-btn">
+										<button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">活动简介</button>
+									</div>
+									<input type="text" autocomplete="off" class="form-control" id="des" placeholder="活动简介" />
+								</div>
+							</div>
+							<div class="col-sm-2">
+								<div class="input-group">
+									<div class="input-group-btn">
+										<button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">活动状态</button>
+									</div>
+									<select class="form-control" id="status">
+										<option value="">请选择</option>
+										<option value="1">开启</option>
+										<option value="0">关闭</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-sm-3">
+								<div class="input-group">
+									<div class="input-group-btn">
+										<button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">活动开始时间范围</button>
+									</div>
+									<input type="text" autocomplete="off" placeholder="时间范围" class="form-control" id="starttime">
+								</div>
+							</div>
+							<div class="col-sm-2">
+								<div class="input-group">
+									<div class="input-group-btn">
+										<button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">支持渠道</button>
+									</div>
+									<select class="form-control" id="groupset">
+										<option value="">请选择</option>
+										{sql query="SELECT channel,nick FROM `cd_agent`"}
+										<option value="{$sql.channel}">{$sql.nick}</option>
+										{/sql}
+									</select>
+								</div>
+							</div>
+							<div class="col-sm-2">
+								<div class="input-group">
+									<div class="input-group-btn">
+										<button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">支持新旧用户</button>
+									</div>
+									<select class="form-control" id="mtype">
+										<option value="">请选择</option>
+										<option value="1">新用户</option>
+										<option value="2">旧用户</option>
+										<option value="3">新旧用户</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-sm-2">
+								<div class="input-group">
+									<div class="input-group-btn">
+										<button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">活动场景</button>
+									</div>
+									<select class="form-control" id="hdmodule">
+										<option value="">请选择</option>
+										<option value="1">注册新用户</option>
+										<option value="2">推荐新用户</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-sm-2">
+								<div class="input-group">
+									<div class="input-group-btn">
+										<button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">活动次数</button>
+									</div>
+									<input type="text" autocomplete="off" class="form-control" id="actnumber" placeholder="活动次数" />
+								</div>
+							</div>
+							<div class="col-sm-2">
+								<div class="input-group">
+									<div class="input-group-btn">
+										<button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">单个下级用户限一次</button>
+									</div>
+									<input type="text" autocomplete="off" class="form-control" id="oneuser" placeholder="单个下级用户限一次" />
+								</div>
+							</div>
+							<!-- search end -->
+							<div class="col-sm-2">
+								<button type="button" class="btn btn-success " onclick="CodeGoods.search()" id="">
+									<i class="fa fa-search"></i>&nbsp;搜索
+								</button>
+								<button type="button" class="btn" onclick="CodeGoods.reset()" id="">
+									<i class="glyphicon glyphicon-share-alt"></i>&nbsp;重置
+								</button>
+							</div>
+						</div>
+						<div class="btn-group-sm" id="CodeGoodsTableToolbar" role="group">
+						{if condition="in_array('admin/Activelist/add',session('admin.nodes')) || session('admin.role_id') eq 1"}
+						<button type="button" id="add" class="btn btn-primary button-margin" onclick="CodeGoods.add()">
+						<i class="fa fa-plus"></i>&nbsp;添加
+						</button>
+						{/if}
+						{if condition="in_array('admin/Activelist/update',session('admin.nodes')) || session('admin.role_id') eq 1"}
+						<button type="button" id="update" class="btn btn-success button-margin" onclick="CodeGoods.update()">
+						<i class="fa fa-pencil"></i>&nbsp;修改
+						</button>
+						{/if}
+						{if condition="in_array('admin/Activelist/delete',session('admin.nodes')) || session('admin.role_id') eq 1"}
+						<button type="button" id="delete" class="btn btn-danger button-margin" onclick="CodeGoods.delete()">
+						<i class="fa fa-trash"></i>&nbsp;删除
+						</button>
+						{/if}
+						{if condition="in_array('admin/Activelist/view',session('admin.nodes')) || session('admin.role_id') eq 1"}
+						<button type="button" id="view" class="btn btn-info button-margin" onclick="CodeGoods.view()">
+						<i class="fa fa-eye"></i>&nbsp;查看详情
+						</button>
+						{/if}
+						</div>
+						<table id="CodeGoodsTable" data-mobile-responsive="true" data-click-to-select="true">
+							<thead><tr><th data-field="selectItem" data-checkbox="true"></th></tr></thead>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+	var CodeGoods = {id: "CodeGoodsTable",seItem: null,table: null,layerIndex: -1};
+
+	CodeGoods.initColumn = function () {
+ 		return [
+ 			{field: 'selectItem', checkbox: true},
+ 			{title: '编号', field: 'id', visible: true, align: 'center', valign: 'middle',sortable: true},
+ 			{title: '活动标题', field: 'title', visible: true, align: 'center', valign: 'middle',sortable: true},
+ 			{title: '活动简介', field: 'des', visible: true, align: 'center', valign: 'middle',sortable: true},
+ 			{title: '赠送会员天数', field: 'hyday', visible: true, align: 'center', valign: 'middle',sortable: true},
+ 			{title: '赚送账户额度', field: 'money', visible: true, align: 'center', valign: 'middle',sortable: true},
+ 			{title: '活动状态', field: 'status', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.statusFormatter},
+ 			{title: '活动开始时间', field: 'starttime', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.starttimeFormatter},
+ 			{title: '活动结束时间', field: 'endtime', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.endtimeFormatter},
+ 			{title: '支持渠道', field: 'groupset', visible: true, align: 'center', valign: 'middle',sortable: true},
+ 			{title: '支持新旧用户', field: 'mtype', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.mtypeFormatter},
+ 			{title: '活动场景', field: 'hdmodule', visible: true, align: 'center', valign: 'middle',sortable: true,formatter:CodeGoods.hdmoduleFormatter},
+ 			{title: '活动次数', field: 'actnumber', visible: true, align: 'center', valign: 'middle',sortable: true},
+ 			{title: '单个下级用户限一次', field: 'oneuser', visible: true, align: 'center', valign: 'middle',sortable: true},
+ 			{title: '操作', field: '', visible: true, align: 'center', valign: 'middle',formatter: 'CodeGoods.buttonFormatter'},
+ 		];
+ 	};
+
+	CodeGoods.buttonFormatter = function(value,row,index) {
+		if(row.id){
+			var str= '';
+			{if condition="in_array('admin/Activelist/update',session('admin.nodes')) || session('admin.role_id') eq 1"}
+			str += '<button type="button" class="btn btn-success btn-xs" title="修改"  onclick="CodeGoods.update('+row.id+')"><i class="fa fa-pencil"></i>&nbsp;修改</button>&nbsp;';
+			{/if}
+			{if condition="in_array('admin/Activelist/delete',session('admin.nodes')) || session('admin.role_id') eq 1"}
+			str += '<button type="button" class="btn btn-danger btn-xs" title="删除"  onclick="CodeGoods.delete('+row.id+')"><i class="fa fa-trash"></i>&nbsp;删除</button>&nbsp;';
+			{/if}
+			return str;
+		}
+	}
+
+	CodeGoods.statusFormatter = function(value,row,index) {
+		if(value !== null){
+			if(value == 1){
+				return '<input class="mui-switch mui-switch-animbg status'+row.id+'" type="checkbox" onclick="CodeGoods.updatestatus('+row.id+',0,\'status\')" checked>';
+			}else{
+				return '<input class="mui-switch mui-switch-animbg status'+row.id+'" type="checkbox" onclick="CodeGoods.updatestatus('+row.id+',1,\'status\')">';
+			}
+		}
+	}
+
+
+	CodeGoods.updatestatus = function(pk,value,field) {
+		var ajax = new $ax(Feng.ctxPath + "/Activelist/updateExt", function (data) {
+			if ('00' !== data.status) {
+				Feng.error(data.msg);
+				$("."+field+pk).prop("checked",!$("."+field+pk).prop("checked"));
+			}
+		});
+		var val = $("."+field+pk).prop("checked") ? 1 : 0;
+		ajax.set('id', pk);
+		ajax.set('status', val);
+		ajax.start();
+	}
+
+	CodeGoods.starttimeFormatter = function(value,row,index) {
+		if(value){
+			return formatDateTime(value,'Y-m-d H:i:s');	
+		}
+	}
+
+	CodeGoods.endtimeFormatter = function(value,row,index) {
+		if(value){
+			return formatDateTime(value,'Y-m-d H:i:s');	
+		}
+	}
+
+	CodeGoods.mtypeFormatter = function(value,row,index) {
+		if(value !== null){
+			var value = value.toString();
+			switch(value){
+				case '1':
+					return '<span class="label label-success">新用户</span>';
+				break;
+				case '2':
+					return '<span class="label label-warning">旧用户</span>';
+				break;
+				case '3':
+					return '<span class="label label-warning">新旧用户</span>';
+				break;
+			}
+		}
+	}
+
+	CodeGoods.hdmoduleFormatter = function(value,row,index) {
+		if(value !== null){
+			var value = value.toString();
+			switch(value){
+				case '1':
+					return '<span class="label label-success">注册新用户</span>';
+				break;
+				case '2':
+					return '<span class="label label-warning">推荐新用户</span>';
+				break;
+			}
+		}
+	}
+
+	CodeGoods.formParams = function() {
+		var queryData = {};
+		queryData['offset'] = 0;
+		queryData['des'] = $("#des").val();
+		queryData['status'] = $("#status").val();
+		queryData['starttime_start'] = $("#starttime").val().split(" - ")[0];
+		queryData['starttime_end'] = $("#starttime").val().split(" - ")[1];
+		queryData['groupset'] = $("#groupset").val();
+		queryData['mtype'] = $("#mtype").val();
+		queryData['hdmodule'] = $("#hdmodule").val();
+		queryData['actnumber'] = $("#actnumber").val();
+		queryData['oneuser'] = $("#oneuser").val();
+		return queryData;
+	}
+
+	CodeGoods.check = function () {
+		var selected = $('#' + this.id).bootstrapTable('getSelections');
+		if(selected.length == 0){
+			Feng.info("请先选中表格中的某一记录！");
+			return false;
+		}else{
+			CodeGoods.seItem = selected;
+			return true;
+		}
+	};
+
+	CodeGoods.add = function (value) {
+		var url = location.search;
+		var index = layer.open({type: 2,title: '添加',area: ['800px', '100%'],fix: false, maxmin: true,content: Feng.ctxPath + '/Activelist/add'+url});
+		this.layerIndex = index;
+		if(!IsPC()){layer.full(index)}
+	}
+
+
+	CodeGoods.update = function (value) {
+		if(value){
+			var index = layer.open({type: 2,title: '修改',area: ['800px', '100%'],fix: false, maxmin: true,content: Feng.ctxPath + '/Activelist/update?id='+value});
+			if(!IsPC()){layer.full(index)}
+		}else{
+			if (this.check()) {
+				var idx = '';
+				$.each(CodeGoods.seItem, function() {
+					idx += ',' + this.id;
+				});
+				idx = idx.substr(1);
+				if(idx.indexOf(",") !== -1){
+					Feng.info("请选择单条数据！");
+					return false;
+				}
+				var index = layer.open({type: 2,title: '修改',area: ['800px', '100%'],fix: false, maxmin: true,content: Feng.ctxPath + '/Activelist/update?id='+idx});
+				this.layerIndex = index;
+				if(!IsPC()){layer.full(index)}
+			}
+		}
+	}
+
+
+	CodeGoods.delete = function (value) {
+		if(value){
+			Feng.confirm("是否删除选中项？", function () {
+				var ajax = new $ax(Feng.ctxPath + "/Activelist/delete", function (data) {
+					if ('00' === data.status) {
+						Feng.success(data.msg);
+						CodeGoods.table.refresh();
+					} else {
+						Feng.error(data.msg);
+					}
+				});
+				ajax.set('id', value);
+				ajax.start();
+			});
+		}else{
+			if (this.check()) {
+				var idx = '';
+				$.each(CodeGoods.seItem, function() {
+					idx += ',' + this.id;
+				});
+				idx = idx.substr(1);
+				Feng.confirm("是否删除选中项？", function () {
+					var ajax = new $ax(Feng.ctxPath + "/Activelist/delete", function (data) {
+						if ('00' === data.status) {
+							Feng.success(data.msg,1000);
+							CodeGoods.table.refresh();
+						} else {
+							Feng.error(data.msg,1000);
+						}
+					});
+					ajax.set('id', idx);
+					ajax.start();
+				});
+			}
+		}
+	}
+
+
+	CodeGoods.view = function (value) {
+		if(value){
+			var index = layer.open({type: 2,title: '查看详情',area: ['800px', '100%'],fix: false, maxmin: true,content: Feng.ctxPath + '/Activelist/view?id='+value});
+			if(!IsPC()){layer.full(index)}
+		}else{
+			if (this.check()) {
+				var idx = '';
+				$.each(CodeGoods.seItem, function() {
+					idx += ',' + this.id;
+				});
+				idx = idx.substr(1);
+				if(idx.indexOf(",") !== -1){
+					Feng.info("请选择单条数据！");
+					return false;
+				}
+				var index = layer.open({type: 2,title: '查看详情',area: ['800px', '100%'],fix: false, maxmin: true,content: Feng.ctxPath + '/Activelist/view?id='+idx});
+				this.layerIndex = index;
+				if(!IsPC()){layer.full(index)}
+			}
+		}
+	}
+
+
+	CodeGoods.search = function() {
+		CodeGoods.table.refresh({query : CodeGoods.formParams()});
+	};
+
+	CodeGoods.reset = function() {
+		$("#searchGroup input,select").val('');
+		CodeGoods.table.refresh({query : CodeGoods.formParams()});
+	};
+
+	$(function() {
+		var defaultColunms = CodeGoods.initColumn();
+		var url = location.search;
+		var table = new BSTable(CodeGoods.id, Feng.ctxPath+"/Activelist/index"+url,defaultColunms,20);
+		table.setPaginationType("server");
+		table.setQueryParams(CodeGoods.formParams());
+		CodeGoods.table = table.init();
+	});
+	laydate.render({elem: '#starttime',type: 'datetime',range:true});
+</script>
+{/block}

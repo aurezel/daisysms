@@ -1,0 +1,220 @@
+{extend name='common/_container'}
+{block name="content"}
+<div class="ibox float-e-margins">
+	<div class="ibox-content">
+		<div class="form-horizontal" id="CodeInfoForm">
+			<div class="row">
+				<div class="col-sm-12">
+				<!-- form start -->
+					<div class="form-group">
+						<label class="col-sm-2 control-label">会员组名：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="gname" value="" name="gname" class="form-control" placeholder="请输入会员组名">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">图标：</label>
+						<div class="col-sm-6">
+							<input type="text" autocomplete="off" id="pic" value="" {if condition="config('my.img_show_status') eq true"}onmousemove="showBigPic(this.value)" onmouseout="closeimg()"{/if} name="pic" class="form-control" placeholder="请输入图标">
+							<span class="help-block m-b-none pic_process"></span>
+						</div>
+						<div class="col-sm-2" style="position:relative; right:30px;">
+							<span id="pic_upload"></span>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">续费方式：</label>
+						<div class="col-sm-9">
+							<?php if(!isset($info['payttype'])){ $info['payttype'] = '1'; }; ?>
+							<select lay-ignore name="payttype" class="form-control" id="payttype">
+								<option value="">请选择</option>
+								<option value="1" {if condition="$info.payttype eq '1'"}selected{/if}>正常</option>
+								<option value="2" {if condition="$info.payttype eq '2'"}selected{/if}>授权码</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">会员类型：</label>
+						<div class="col-sm-9">
+							<?php if(!isset($info['utype'])){ $info['utype'] = '1'; }; ?>
+							<select lay-ignore name="utype" class="form-control" id="utype">
+								<option value="">请选择</option>
+								<option value="1" {if condition="$info.utype eq '1'"}selected{/if}>普通会员</option>
+								<option value="2" {if condition="$info.utype eq '2'"}selected{/if}>代理会员</option>
+							</select>
+							<span class="help-block m-b-none">普通会员|1|success,代理会员|2|warning</span>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">暂时未用：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="dpoint" value="0" name="dpoint" class="form-control" placeholder="请输入暂时未用">
+							<span class="help-block m-b-none">10% 填写10</span>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">收益抽提成：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="profitpoint" value="0" name="profitpoint" class="form-control" placeholder="请输入收益抽提成">
+							<span class="help-block m-b-none">10%就填写10 ，如果会员表里有单独设置，就按会员设置的提成</span>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">会员收费类型：</label>
+						<div class="col-sm-9">
+							<?php if(!isset($info['vippaytype'])){ $info['vippaytype'] = '2'; }; ?>
+							<select lay-ignore name="vippaytype" class="form-control" id="vippaytype">
+								<option value="">请选择</option>
+								<option value="1" {if condition="$info.vippaytype eq '1'"}selected{/if}>包月VIP</option>
+								<option value="2" {if condition="$info.vippaytype eq '2'"}selected{/if}>收益VIP</option>
+								<option value="3" {if condition="$info.vippaytype eq '3'"}selected{/if}>贵宾VIP</option>
+							</select>
+							<span class="help-block m-b-none">包月VIP,收益VIP,贵宾VIP</span>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">兑换U手续费：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="cucharge" value="3" name="cucharge" class="form-control" placeholder="请输入兑换U手续费">
+							<span class="help-block m-b-none">3%就填写3</span>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">会员组备注：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="des" value="" name="des" class="form-control" placeholder="请输入会员组备注">
+						</div>
+					</div>
+					<div class="form-group layui-form">
+						<label class="col-sm-2 control-label">开放大神：</label>
+						<div class="col-sm-9">
+							<?php if(!isset($info['leaderlist'])){ $info['leaderlist'] = ''; }; ?>
+								{sql query="select id,title from cd_leader"}
+									<input name="leaderlist" value="{$sql.id}" type="checkbox" {if in_array($sql.id,explode(',',$info['leaderlist']))}checked{/if} title="{$sql.title}">
+								{/sql}
+						</div>
+					</div>
+					<div class="form-group layui-form">
+						<label class="col-sm-2 control-label">显示首页大神：</label>
+						<div class="col-sm-9">
+							<?php if(!isset($info['indexleaderlist'])){ $info['indexleaderlist'] = ''; }; ?>
+								{sql query="select id,title from cd_leader"}
+									<input name="indexleaderlist" value="{$sql.id}" type="checkbox" {if in_array($sql.id,explode(',',$info['indexleaderlist']))}checked{/if} title="{$sql.title}">
+								{/sql}
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">可欠额度：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="billmoney" value="200" name="billmoney" class="form-control" placeholder="请输入可欠额度">
+							<span class="help-block m-b-none">只对收益提成方式的会员有用</span>
+						</div>
+					</div>
+					<div class="form-group layui-form">
+						<label class="col-sm-2 control-label">收费开关：</label>
+						<div class="col-sm-9">
+							<?php if(!isset($info['isfree'])){ $info['isfree'] = 0; }; ?>
+							<input name="isfree" value="1" type="radio" {if condition="$info.isfree eq '1'"}checked{/if} title="开启">
+							<input name="isfree" value="0" type="radio" {if condition="$info.isfree eq '0'"}checked{/if} title="关闭">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">账单方式：</label>
+						<div class="col-sm-9">
+							<?php if(!isset($info['billtype'])){ $info['billtype'] = '3'; }; ?>
+							<select lay-ignore name="billtype" class="form-control" id="billtype">
+								<option value="">请选择</option>
+								<option value="1" {if condition="$info.billtype eq '1'"}selected{/if}>按天统计</option>
+								<option value="2" {if condition="$info.billtype eq '2'"}selected{/if}>按周统计</option>
+								<option value="3" {if condition="$info.billtype eq '3'"}selected{/if}>按月统计</option>
+							</select>
+							<span class="help-block m-b-none">只对收益VIP类型有效果</span>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">盈利统计方式：</label>
+						<div class="col-sm-9">
+							<?php if(!isset($info['yltjtype'])){ $info['yltjtype'] = '1'; }; ?>
+							<select lay-ignore name="yltjtype" class="form-control" id="yltjtype">
+								<option value="">请选择</option>
+								<option value="1" {if condition="$info.yltjtype eq '1'"}selected{/if}>不盈利不收</option>
+								<option value="2" {if condition="$info.yltjtype eq '2'"}selected{/if}>亏本抵扣</option>
+							</select>
+						</div>
+					</div>
+				<!-- form end -->
+				</div>
+			</div>
+			<div class="hr-line-dashed"></div>
+			<div class="row btn-group-m-t">
+				<div class="col-sm-9 col-sm-offset-1">
+					<button type="button" class="btn btn-primary" onclick="CodeInfoDlg.add()" id="ensure">
+						<i class="fa fa-check"></i>&nbsp;确认提交
+					</button>
+					<button type="button" class="btn btn-danger" onclick="CodeInfoDlg.close()" id="cancel">
+						<i class="fa fa-eraser"></i>&nbsp;取消
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="__PUBLIC__/static/js/upload.js" charset="utf-8"></script>
+<script src="__PUBLIC__/static/js/plugins/layui/layui.js" charset="utf-8"></script>
+<script>
+layui.use(['form'],function(){});
+uploader('pic_upload','pic','image',false,'','{:url("admin/Upload/uploadImages")}');
+var CodeInfoDlg = {
+	CodeInfoData: {},
+	validateFields: {
+		gname: {
+			validators: {
+				notEmpty: {
+					message: '会员组名不能为空'
+	 			},
+	 		}
+	 	},
+	 }
+}
+
+CodeInfoDlg.collectData = function () {
+	this.set('id').set('gname').set('pic').set('payttype').set('utype').set('dpoint').set('profitpoint').set('vippaytype').set('cucharge').set('des').set('billmoney').set('billtype').set('yltjtype');
+};
+
+CodeInfoDlg.add = function () {
+	 this.clearData();
+	 this.collectData();
+	 if (!this.validate()) {
+	 	return;
+	 }
+	 var leaderlist = '';
+	 $('input[name="leaderlist"]:checked').each(function(){ 
+	 	leaderlist += ',' + $(this).val(); 
+	 }); 
+	  leaderlist = leaderlist.substr(1); 
+	 var indexleaderlist = '';
+	 $('input[name="indexleaderlist"]:checked').each(function(){ 
+	 	indexleaderlist += ',' + $(this).val(); 
+	 }); 
+	  indexleaderlist = indexleaderlist.substr(1); 
+	 var isfree = $("input[name = 'isfree']:checked").val();
+	 var ajax = new $ax(Feng.ctxPath + "/Tradegroup/add", function (data) {
+	 	if ('00' === data.status) {
+	 		Feng.success(data.msg,1000);
+	 		window.parent.CodeGoods.table.refresh();
+	 		CodeInfoDlg.close();
+	 	} else {
+	 		Feng.error(data.msg + "！",1000);
+		 }
+	 })
+	 ajax.set('leaderlist',leaderlist);
+	 ajax.set('indexleaderlist',indexleaderlist);
+	 ajax.set('isfree',isfree);
+	 ajax.set(this.CodeInfoData);
+	 ajax.start();
+};
+
+
+</script>
+<script src="__PUBLIC__/static/js/base.js" charset="utf-8"></script>
+{/block}

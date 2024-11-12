@@ -1,0 +1,47 @@
+{extend name='common/_container'} 
+{block name="content"} 
+<div class="ibox float-e-margins"> 
+	<div class="ibox-content"> 
+		<table class="table table-bordered" style="word-break:break-all;"> 
+			<tbody> 
+				<tr> 
+					<td style="background-color:#F5F5F6; font-weight:bold; text-align:right" width="15%">安卓更新方式：</td> 
+					<td><?php echo getFieldVal($info["androidmethod"],"普通更新|1|success,强制更新|2|warning");?></td>   
+				</tr> 
+				<tr> 
+					<td style="background-color:#F5F5F6; font-weight:bold; text-align:right" width="15%">安卓地址：</td> 
+					<td><a target="_blank" href="{$info.androidlink}">下载附件</a></td>   
+				</tr> 
+				<tr> 
+					<td style="background-color:#F5F5F6; font-weight:bold; text-align:right" width="15%">ios地址：</td> 
+					<td><a target="_blank" href="{$info.ioslink}">下载附件</a></td>   
+				</tr> 
+				<tr> 
+					<td style="background-color:#F5F5F6; font-weight:bold; text-align:right" width="15%">安卓版本号：</td> 
+					<td>{$info.androidversion}</td>   
+				</tr> 
+				<tr> 
+					<td style="background-color:#F5F5F6; font-weight:bold; text-align:right" width="15%">ios版本号：</td> 
+					<td>{$info.iosversion}</td>   
+				</tr> 
+				<tr> 
+					<td style="background-color:#F5F5F6; font-weight:bold; text-align:right" width="15%">ios更新方式：</td> 
+					<td><?php echo getFieldVal($info["iosmethod"],"普通更新|1|success,强制更新|2|warning");?></td>   
+				</tr> 
+				<tr> 
+					<td style="background-color:#F5F5F6; font-weight:bold; text-align:right" width="15%">app状态：</td> 
+					<td>{$info.app_status}</td>   
+				</tr> 
+				<tr> 
+					<td style="background-color:#F5F5F6; font-weight:bold; text-align:right" width="15%">客服微信：</td> 
+					<td>{$info.customer_wechat}</td>   
+				</tr> 
+				<tr> 
+					<td style="background-color:#F5F5F6; font-weight:bold; text-align:right" width="15%">客服QQ：</td> 
+					<td>{$info.kfqq}</td>   
+				</tr> 
+			</tbody> 
+		</table> 
+	</div> 
+</div> 
+{/block} 

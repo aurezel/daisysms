@@ -1,0 +1,93 @@
+{extend name='common/_container'}
+{block name="content"}
+<div class="ibox float-e-margins">
+<input type="hidden" name='withdrawal_id' id='withdrawal_id' value="{$info.withdrawal_id}" />
+	<div class="ibox-content">
+		<div class="form-horizontal" id="CodeInfoForm">
+			<div class="row">
+				<div class="col-sm-12">
+				<!-- form start -->
+					<div class="form-group">
+						<label class="col-sm-2 control-label">会员ID：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="member_id" value="{$info.member_id}" name="member_id" class="form-control" placeholder="请输入会员ID">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">转账金额：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="transfer_money" value="{$info.transfer_money}" name="transfer_money" class="form-control" placeholder="请输入转账金额">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">交易状态：</label>
+						<div class="col-sm-9">
+							<select lay-ignore name="status" class="form-control" id="status">
+								<option value="">请选择</option>
+								<option value="1" {if condition="$info.status eq '1'"}selected{/if}>等待处理</option>
+								<option value="2" {if condition="$info.status eq '2'"}selected{/if}>提现成功</option>
+								<option value="3" {if condition="$info.status eq '3'"}selected{/if}>提现失败</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">交易说明：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="des" value="{$info.des}" name="des" class="form-control" placeholder="请输入交易说明">
+						</div>
+					</div>
+				<!-- form end -->
+				</div>
+			</div>
+			<div class="hr-line-dashed"></div>
+			<div class="row btn-group-m-t">
+				<div class="col-sm-9 col-sm-offset-1">
+					<button type="button" class="btn btn-primary" onclick="CodeInfoDlg.update()" id="ensure">
+						<i class="fa fa-check"></i>&nbsp;确认提交
+					</button>
+					<button type="button" class="btn btn-danger" onclick="CodeInfoDlg.close()" id="cancel">
+						<i class="fa fa-eraser"></i>&nbsp;取消
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="__PUBLIC__/static/js/upload.js" charset="utf-8"></script>
+<script src="__PUBLIC__/static/js/plugins/layui/layui.js" charset="utf-8"></script>
+<script>
+layui.use(['form'],function(){});
+laydate.render({elem: '#updateline',type: 'datetime',trigger:'click'});
+var CodeInfoDlg = {
+	CodeInfoData: {},
+	validateFields: {
+	 }
+}
+
+CodeInfoDlg.collectData = function () {
+	this.set('withdrawal_id').set('member_id').set('transfer_money').set('status').set('des').set('updateline');
+};
+
+CodeInfoDlg.update = function () {
+	 this.clearData();
+	 this.collectData();
+	 if (!this.validate()) {
+	 	return;
+	 }
+	 var ajax = new $ax(Feng.ctxPath + "/Withdrawal/update", function (data) {
+	 	if ('00' === data.status) {
+	 		Feng.success(data.msg,1000);
+	 		window.parent.CodeGoods.table.refresh();
+	 		CodeInfoDlg.close();
+	 	} else {
+	 		Feng.error(data.msg + "！",1000);
+		 }
+	 })
+	 ajax.set(this.CodeInfoData);
+	 ajax.start();
+};
+
+
+</script>
+<script src="__PUBLIC__/static/js/base.js" charset="utf-8"></script>
+{/block}

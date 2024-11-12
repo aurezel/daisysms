@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+    <title>Dashboard - daisySMS</title>
+
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/static/css/_main.css?v=f90b0b14e89c3f9d28d64d85d8b45148">
+
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/static/css/_notie.min.css">
+
+
+    <script src="__PUBLIC__/static/js/jquery.min.js?v=2.1.4"></script>
+    <script src="__PUBLIC__/static/js/bootstrap.min.js?v=3.3.6"></script>
+    <script src="__PUBLIC__/static/js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
+    <script src="__PUBLIC__/static/js/plugins/validate/bootstrapValidator.min.js"></script>
+    <script src="__PUBLIC__/static/js/plugins/validate/zh_CN.js"></script>
+    <script src="__PUBLIC__/static/js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
+    <script src="__PUBLIC__/static/js/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+    <script src="__PUBLIC__/static/js/plugins/layer/layer.min.js"></script>
+    <script src="__PUBLIC__/static/js/plugins/layer/laydate/laydate.js"></script>
+    <script src="__PUBLIC__/static/js/common/ajax-object.js?v=<?php echo rand(1000,9999)?>"></script>
+    <script src="__PUBLIC__/static/js/common/bootstrap-table-object.js"></script>
+    <script src="__PUBLIC__/static/js/common/Feng.js"></script>
+    <script src="__PUBLIC__/static/js/plugins/webuploader/webuploader.min.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/static/js/ueditor/ueditor.config.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/static/js/ueditor/ueditor.all.min.js"> </script>
+    <script type="text/javascript" src="__PUBLIC__/static/js/xheditor/xheditor-1.2.2.min.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/static/js/xheditor/xheditor_lang/zh-cn.js"></script>
+
+    <style>.notie-container {z-index: 20;}</style>
+
+    <style>
+        .phone::before {
+            content: "+1 ";
+            user-select: none;
+            opacity: 0.5;
+        }
+    </style>
+
+</head>
+<body data-theme="light">
+
+<!--左侧导航开始-->
+{include file="common/__top"}
+<!--左侧导航结束-->
+
+<div class="py-8"></div>
+
+<div class="flex flex-col lg:flex-row h-full">
+
+    <!--左侧导航开始-->
+    {include file="common/__left"}
+    <!--左侧导航结束-->
+
+    <div class="flex flex-col p-8 border-r">
+        <h2 class="card-title mb-2">SMS Verifications</h2>
+
+<!--        <div class="text-stone-500">-->
+<!--            <p>Rent a phone for 7 minutes.</p>-->
+<!--            <p>Credits are only used if you receive the SMS code.</p>-->
+<!--        </div>-->
+
+        <div class="flex flex-row pt-4">
+            <div class="input-group">
+                <label class="input-group">
+                    <span>Service</span>
+                    <input id="service_filter" type="text" class="input input-bordered w-full" />
+
+                    <button class="btn btn-square btn-success">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+                    </button>
+                </label>
+            </div>
+
+            <button class="btn btn-square btn-success ml-2" id="toggle-settings">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-settings"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+            </button>
+        </div>
+
+        <div id="settings" class="mt-4 hidden">
+            <div class="input-group">
+                <span class="w-40">Area codes</span>
+                <input id="area_codes" type="text" class="input input-bordered w-full" placeholder="503, 202, 404" />
+            </div>
+            <p class="text-xs opacity-60 py-2 px-4">Preferred area codes. Increases price by 20%.</p>
+
+            <div class="input-group mt-2">
+                <span class="w-40">Carriers</span>
+                <input id="carriers" type="text" class="input input-bordered w-full" placeholder="tmo, vz, att" />
+            </div>
+            <p class="text-xs opacity-60 py-2 px-4">Preferred carrier. Increases price by 20%. <a class="link" href="#carrier-info">More info</a></p>
+        </div>
+
+        <div class="overflow-x-auto h-40 xl:h-96 mt-4">
+            <table id="CodeGoodsTable" data-mobile-responsive="true" data-click-to-select="true" class="table w-full">
+                <thead><tr><th data-field="selectItem" data-checkbox="true"></th></tr></thead>
+            </table>
+            {block name="content"}
+            <script>
+                var CodeGoods = {id: "CodeGoodsTable",seItem: null,table: null,layerIndex: -1};
+
+                CodeGoods.initColumn = function () {
+                    return [
+                        // {field: 'selectItem', checkbox: false},
+                        {title: '编号', field: 'id', visible: false, align: 'left', valign: 'middle',sortable: false},
+                        {title: 'Service', field: 'name', visible: true, align: 'left', valign: 'middle',sortable: false},
+                        {title: 'Price', field: 'cost', visible: true, align: 'left', valign: 'middle',sortable: false},
+                        {title: '', field: '', visible: true, align: 'left', valign: 'middle'},
+                    ];
+                };
+
+
+
+
+                        // CodeGoods.formParams = function() {
+                        //     var queryData = {};
+                        //     queryData['offset'] = 0;
+                        //     queryData['Service'] = $("#name").val();
+                        //     queryData['membername'] = $("#membername").val();
+                        //     // queryData['sex'] = $("#sex").val();
+                        //     // queryData['mobile'] = $("#mobile").val();
+                        //     // queryData['umoney_start'] = $("#umoney_start").val();
+                        //     // queryData['umoney_end'] = $("#umoney_end").val();
+                        //     // queryData['parentid'] = $("#parentid").val();
+                        //     // queryData['utype'] = $("#utype").val();
+                        //     // queryData['groupid'] = $("#groupid").val();
+                        //     // queryData['channel'] = $("#channel").val();
+                        //     // queryData['aupay'] = $("#aupay").val();
+                        //     // queryData['spotusdt_start'] = $("#spotusdt_start").val();
+                        //     // queryData['spotusdt_end'] = $("#spotusdt_end").val();
+                        //     return queryData;
+                        // }
+
+                        // CodeGoods.check = function () {
+                        //     var selected = $('#' + this.id).bootstrapTable('getSelections');
+                        //     if(selected.length == 0){
+                        //         Feng.info("请先选中表格中的某一记录！");
+                        //         return false;
+                        //     }else{
+                        //         CodeGoods.seItem = selected;
+                        //         return true;
+                        //     }
+                        // };
+
+                        CodeGoods.search = function() {
+                            CodeGoods.table.refresh({query : CodeGoods.formParams()});
+                        };
+
+                        CodeGoods.reset = function() {
+                            $("#searchGroup input,select").val('');
+                            CodeGoods.table.refresh({query : CodeGoods.formParams()});
+                        };
+
+                        $(function() {
+                            var defaultColunms = CodeGoods.initColumn();
+                            var url = location.search;
+                            var table = new BSTable(CodeGoods.id, Feng.ctxPath+"/dashboard/services/index"+url,defaultColunms,20);
+                            // table.setPaginationType("server");
+                            // table.setQueryParams(CodeGoods.formParams());
+                            CodeGoods.table = table.init();
+                            $(".fixed-table-toolbar,.fixed-table-pagination").remove();
+                        });
+            </script>
+            {/block}
+
+        </div>
+    </div>
+
+    <div class="flex flex-col p-8">
+        <h2 class="card-title mb-2">Rented numbers</h2>
+
+        <div class="text-stone-500">
+            <p>No need to refresh the page to get the code.</p>
+        </div>
+
+        <div class="text-stone-500">
+            You can get more SMS to the same number for free when 🔁 is displayed.
+        </div>
+
+        <div class="overflow-x-auto my-4">
+            <table class="table w-full">
+                <!-- head -->
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Service</th>
+                    <th>Phone</th>
+                    <th>Code</th>
+                    <th>Cost</th>
+                    <th>TTL</th>
+                    <th></th>
+                </tr>
+                </thead>
+
+                <tbody id="rentals">
+                <tr>
+                    <td colspan="7" class="text-center">
+                        <div>Please add money to your account to rent numbers.</div>
+                        <div class="mt-4"><a href="/dashboard/wallet" class="btn btn-success">Open wallet</a></div>
+                    </td>
+                </tr>
+
+                <template id="rental">
+                    <tr>
+                        <td class="id"></td>
+                        <td class="service"></td>
+                        <td class="phone font-mono"></td>
+                        <td class="code font-mono"></td>
+                        <td class="price"></td>
+                        <td class="time_left font-mono"></td>
+
+                        <td>
+                            <a class="cancel cursor-pointer">🚫</a>
+                        </td>
+                    </tr>
+                </template>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <template id="unlisted_notice">
+        <div class="text-left inline-block">
+            <div>Unlisted service will reserve the number for you.</div>
+            <div>As soon as a new SMS comes, we'll give you the entire text.</div>
+            <div>This will not work for listed services.</div>
+            <div>We don't work with any banking or dating services.</div>
+
+            <label class="cursor-pointer flex items-center text-sm mt-4">
+                <input id="unlisted_notice_no_show" type="checkbox" class="checkbox mr-2" />
+                <span>Don't show this message again</span>
+            </label>
+        </div>
+    </template>
+
+    <template id="first_use_notice">
+        <div class="text-left inline-block">
+            <div class="my-6">
+                We recommend reading
+                <a href="/docs/howto" class="link" target="_blank">this short guide</a>
+                on how to successfully use this service.
+            </div>
+
+            <div class="my-6">Main takeaway: avoid using free VPN apps.</div>
+
+            <label class="cursor-pointer flex items-center text-sm mt-4">
+                <input id="first_use_notice_no_show" type="checkbox" class="checkbox mr-2" />
+                <span>Don't show this message again</span>
+            </label>
+        </div>
+    </template>
+
+    <template id="cancel_notice">
+        <p>Do you want to cancel this rental? Your balance will be unlocked.</p>
+    </template>
+
+    <div class="modal" id="carrier-info">
+        <div class="modal-box w-1/2">
+            <h3 class="font-bold text-lg">Why choose carrier</h3>
+            <p class="py-4">There are 3 carriers in the USA: T-Mobile (tmo), Verizon (vz), and AT&T (att). </p>
+            <p>If you're experiencing issues on services like Tinder, where it says an account already exists, we recommend you try Verizon, or AT&T.</p>
+            <div class="modal-action">
+                <a href="#" class="btn">OK</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--左侧导航开始-->
+{include file="common/__footer"}
+<!--左侧导航结束-->
+
+<script src="https://unpkg.com/notie@4.3.1/dist/notie.min.js"></script>
+
+
+</body>

@@ -1,0 +1,147 @@
+{extend name='common/_container'}
+{block name="content"}
+<div class="ibox float-e-margins">
+	<div class="ibox-content">
+		<div class="form-horizontal" id="CodeInfoForm">
+			<div class="row">
+				<div class="col-sm-12">
+				<!-- form start -->
+					<div class="form-group">
+						<label class="col-sm-2 control-label">手机号：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="mobile" value="" name="mobile" class="form-control" placeholder="请输入手机号">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">渠道标识：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="channel" value="" name="channel" class="form-control" placeholder="请输入渠道标识">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">备注：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="nick" value="" name="nick" class="form-control" placeholder="请输入备注">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">登陆密码：</label>
+						<div class="col-sm-9">
+							<input type="password" id="passwd" value="" name="passwd" class="form-control" placeholder="请输入登陆密码">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">账号余额：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="money" value="0" name="money" class="form-control" placeholder="请输入账号余额">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">盈利率提成比例：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="getpoint" value="10" name="getpoint" class="form-control" placeholder="请输入盈利率提成比例">
+							<span class="help-block m-b-none">用于盈利率收费的会员提成10% 就填写10</span>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">交费会员提成比例：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="paygetpoint" value="10" name="paygetpoint" class="form-control" placeholder="请输入交费会员提成比例">
+							<span class="help-block m-b-none">用于续费会员提成比例</span>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">总提成：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="allmoney" value="0" name="allmoney" class="form-control" placeholder="请输入总提成">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">状态：</label>
+						<div class="col-sm-9">
+							<?php if(!isset($info['status'])){ $info['status'] = '1'; }; ?>
+							<select lay-ignore name="status" class="form-control" id="status">
+								<option value="">请选择</option>
+								<option value="1" {if condition="$info.status eq '1'"}selected{/if}>正常</option>
+								<option value="0" {if condition="$info.status eq '0'"}selected{/if}>禁用</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">默认交易会员组ID：</label>
+						<div class="col-sm-9">
+							<?php if(!isset($info['groupid'])){ $info['groupid'] = ''; }; ?>
+							<select lay-ignore name="groupid" class="form-control" id="groupid">
+								<option value="">请选择</option>
+								{sql query="select id,gname from cd_tradegroup"}
+									<option value="{$sql.id}" {if condition="$info.groupid eq $sql.id"}selected{/if}>{$sql.gname}</option>
+								{/sql}
+							</select>
+						</div>
+					</div>
+				<!-- form end -->
+				</div>
+			</div>
+			<div class="hr-line-dashed"></div>
+			<div class="row btn-group-m-t">
+				<div class="col-sm-9 col-sm-offset-1">
+					<button type="button" class="btn btn-primary" onclick="CodeInfoDlg.add()" id="ensure">
+						<i class="fa fa-check"></i>&nbsp;确认提交
+					</button>
+					<button type="button" class="btn btn-danger" onclick="CodeInfoDlg.close()" id="cancel">
+						<i class="fa fa-eraser"></i>&nbsp;取消
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="__PUBLIC__/static/js/upload.js" charset="utf-8"></script>
+<script src="__PUBLIC__/static/js/plugins/layui/layui.js" charset="utf-8"></script>
+<script>
+layui.use(['form'],function(){});
+laydate.render({elem: '#dateline',type: 'datetime',trigger:'click'});
+var CodeInfoDlg = {
+	CodeInfoData: {},
+	validateFields: {
+		channel: {
+			validators: {
+	 		}
+	 	},
+		passwd: {
+			validators: {
+				notEmpty: {
+					message: '登陆密码不能为空'
+	 			},
+	 		}
+	 	},
+	 }
+}
+
+CodeInfoDlg.collectData = function () {
+	this.set('id').set('mobile').set('channel').set('nick').set('passwd').set('money').set('getpoint').set('paygetpoint').set('allmoney').set('status').set('dateline').set('groupid');
+};
+
+CodeInfoDlg.add = function () {
+	 this.clearData();
+	 this.collectData();
+	 if (!this.validate()) {
+	 	return;
+	 }
+	 var ajax = new $ax(Feng.ctxPath + "/Agent/add", function (data) {
+	 	if ('00' === data.status) {
+	 		Feng.success(data.msg,1000);
+	 		window.parent.CodeGoods.table.refresh();
+	 		CodeInfoDlg.close();
+	 	} else {
+	 		Feng.error(data.msg + "！",1000);
+		 }
+	 })
+	 ajax.set(this.CodeInfoData);
+	 ajax.start();
+};
+
+
+</script>
+<script src="__PUBLIC__/static/js/base.js" charset="utf-8"></script>
+{/block}

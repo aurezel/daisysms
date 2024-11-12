@@ -1,0 +1,135 @@
+{extend name='common/_container'}
+{block name="content"}
+<div class="ibox float-e-margins">
+<input type="hidden" name='id' id='id' value="{$info.id}" />
+	<div class="ibox-content">
+		<div class="form-horizontal" id="CodeInfoForm">
+			<div class="row">
+				<div class="col-sm-12">
+				<!-- form start -->
+					<div class="form-group">
+						<label class="col-sm-2 control-label">充提方式：</label>
+						<div class="col-sm-9">
+							<select lay-ignore name="payway_id" class="form-control" id="payway_id">
+								<option value="">请选择</option>
+								{sql query="select payway_id,name from cd_payway where status=1"}
+									<option value="{$sql.payway_id}" {if condition="$info.payway_id eq $sql.payway_id"}selected{/if}>{$sql.name}</option>
+								{/sql}
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">渠道：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="channel" value="{$info.channel}" name="channel" class="form-control" placeholder="请输入渠道">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">手续费：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="charge" value="{$info.charge}" name="charge" class="form-control" placeholder="请输入手续费">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">手续费方式：</label>
+						<div class="col-sm-9">
+							<select lay-ignore name="chargetype" class="form-control" id="chargetype">
+								<option value="">请选择</option>
+								<option value="1" {if condition="$info.chargetype eq '1'"}selected{/if}>每笔</option>
+								<option value="2" {if condition="$info.chargetype eq '2'"}selected{/if}>提现额百分比</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">账号：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="account" value="{$info.account}" name="account" class="form-control" placeholder="请输入账号">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">二维码图片：</label>
+						<div class="col-sm-6">
+							<input type="text" autocomplete="off" id="thumb" value="{$info.thumb}" {if condition="config('my.img_show_status') eq true"}onmousemove="showBigPic(this.value)" onmouseout="closeimg()"{/if} name="thumb" class="form-control" placeholder="请输入二维码图片">
+							<span class="help-block m-b-none thumb_process"></span>
+						</div>
+						<div class="col-sm-2" style="position:relative; right:30px;">
+							<span id="thumb_upload"></span>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">帮助说明：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="smkey" value="{$info.smkey}" name="smkey" class="form-control" placeholder="请输入帮助说明">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">说明配置：</label>
+						<div class="col-sm-9">
+							<input type="text" autocomplete="off" id="des" value="{$info.des}" name="des" class="form-control" placeholder="请输入说明配置">
+						</div>
+					</div>
+					<div class="form-group layui-form">
+						<label class="col-sm-2 control-label">状态：</label>
+						<div class="col-sm-9">
+							<?php if(!isset($info['status'])){ $info['status'] = 1; }; ?>
+							<input name="status" value="1" type="radio" {if condition="$info.status eq '1'"}checked{/if} title="开启">
+							<input name="status" value="0" type="radio" {if condition="$info.status eq '0'"}checked{/if} title="关闭">
+						</div>
+					</div>
+				<!-- form end -->
+				</div>
+			</div>
+			<div class="hr-line-dashed"></div>
+			<div class="row btn-group-m-t">
+				<div class="col-sm-9 col-sm-offset-1">
+					<button type="button" class="btn btn-primary" onclick="CodeInfoDlg.update()" id="ensure">
+						<i class="fa fa-check"></i>&nbsp;确认提交
+					</button>
+					<button type="button" class="btn btn-danger" onclick="CodeInfoDlg.close()" id="cancel">
+						<i class="fa fa-eraser"></i>&nbsp;取消
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="__PUBLIC__/static/js/upload.js" charset="utf-8"></script>
+<script src="__PUBLIC__/static/js/plugins/layui/layui.js" charset="utf-8"></script>
+<script>
+layui.use(['form'],function(){});
+uploader('thumb_upload','thumb','image',false,'','{:url("admin/Upload/uploadImages")}');
+var CodeInfoDlg = {
+	CodeInfoData: {},
+	validateFields: {
+	 }
+}
+
+CodeInfoDlg.collectData = function () {
+	this.set('id').set('payway_id').set('channel').set('charge').set('chargetype').set('account').set('thumb').set('smkey').set('des');
+};
+
+CodeInfoDlg.update = function () {
+	 this.clearData();
+	 this.collectData();
+	 if (!this.validate()) {
+	 	return;
+	 }
+	 var status = $("input[name = 'status']:checked").val();
+	 var ajax = new $ax(Feng.ctxPath + "/Channelpayset/update", function (data) {
+	 	if ('00' === data.status) {
+	 		Feng.success(data.msg,1000);
+	 		window.parent.CodeGoods.table.refresh();
+	 		CodeInfoDlg.close();
+	 	} else {
+	 		Feng.error(data.msg + "！",1000);
+		 }
+	 })
+	 ajax.set('status',status);
+	 ajax.set(this.CodeInfoData);
+	 ajax.start();
+};
+
+
+</script>
+<script src="__PUBLIC__/static/js/base.js" charset="utf-8"></script>
+{/block}

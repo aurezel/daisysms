@@ -1,0 +1,59 @@
+{extend name='common/_container'} 
+{block name="content"} 
+<div class="ibox float-e-margins"> 
+	<div class="ibox-content"> 
+		<table class="table table-bordered" style="word-break:break-all;"> 
+			<tbody> 
+				<tr> 
+					<td style="background-color:#F5F5F6; font-weight:bold; text-align:right" width="15%">会员ID：</td> 
+					<td>{$info.member_id}</td>   
+				</tr> 
+				<tr> 
+					<td style="background-color:#F5F5F6; font-weight:bold; text-align:right" width="15%">会员手机：</td> 
+					<td>{$info.mobile}</td>   
+				</tr> 
+				<tr> 
+					<td style="background-color:#F5F5F6; font-weight:bold; text-align:right" width="15%">说明：</td> 
+					<td>{$info.des}</td>   
+				</tr> 
+				<tr> 
+					<td style="background-color:#F5F5F6; font-weight:bold; text-align:right" width="15%">变动后金额：</td> 
+					<td>{$info.balance}</td>   
+				</tr> 
+				<tr> 
+					<td style="background-color:#F5F5F6; font-weight:bold; text-align:right" width="15%">变动金额：</td> 
+					<td>{$info.money}</td>   
+				</tr> 
+				<tr> 
+					<td style="background-color:#F5F5F6; font-weight:bold; text-align:right" width="15%">收支类型：</td> 
+					<td><?php echo getFieldVal($info["type"],"收入|1|success,支出|2|warning");?></td>   
+				</tr> 
+				<tr> 
+					<td style="background-color:#F5F5F6; font-weight:bold; text-align:right" width="15%">交易模块：</td> 
+					<td><?php echo getFieldVal($info["trantype"],"充值|1|success,提成|2|warning,购买VIP扣费|3|nfo,还款|4|danger,提现|5|danger,资金划转|6|danger,渠道资金划转|7|danger,活动赠送|8|danger");?></td>   
+				</tr> 
+				<tr> 
+					<td style="background-color:#F5F5F6; font-weight:bold; text-align:right" width="15%">交易IP：</td> 
+					<td>{$info.ip}</td>   
+				</tr> 
+				<tr> 
+					<td style="background-color:#F5F5F6; font-weight:bold; text-align:right" width="15%">交易日期：</td> 
+					<td>{if $info.dateline}{$info.dateline|date='Y-m-d H:i:s'}{/if}</td>   
+				</tr> 
+				<tr> 
+					<td style="background-color:#F5F5F6; font-weight:bold; text-align:right" width="15%">提现状态：</td> 
+					<td><?php echo getFieldVal($info["txstatus"],"正常|1|success,处理中|0|danger");?></td>   
+				</tr> 
+				<tr> 
+					<td style="background-color:#F5F5F6; font-weight:bold; text-align:right" width="15%">定单号：</td> 
+					<td>{$info.trade_no}</td>   
+				</tr> 
+				<tr> 
+					<td style="background-color:#F5F5F6; font-weight:bold; text-align:right" width="15%">账本类型：</td> 
+					<td><?php echo getFieldVal($info["blancetype"],"交易账本|1|success,提成账本|2|warning");?></td>   
+				</tr> 
+			</tbody> 
+		</table> 
+	</div> 
+</div> 
+{/block} 

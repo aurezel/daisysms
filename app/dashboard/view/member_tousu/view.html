@@ -1,0 +1,46 @@
+{extend name='common/_container'} 
+{block name="content"} 
+<div class="ibox float-e-margins"> 
+	<div class="ibox-content"> 
+		<table class="table table-bordered" style="word-break:break-all;"> 
+			<tbody> 
+				<tr> 
+					<td style="background-color:#F5F5F6; font-weight:bold; text-align:right" width="15%">聊天记录：</td> 
+					<td>{$info.msgs}</td>   
+				</tr> 
+				<tr> 
+					<td style="background-color:#F5F5F6; font-weight:bold; text-align:right" width="15%">聊天截图：</td> 
+					<td>
+						<ul>
+						<?php $imgList = json_decode(html_out($info["screenshots"]),true);?>
+						{foreach name="imgList" id="vo"}
+						<li style="float:left; margin-bottom:2px; margin-right:2px;"><a href="javascript:void(0)" onclick="openImg('{$vo.url}')"><img src="{$vo.url}" height="75"></a></li>
+						{/foreach}
+						</ul>
+</td>   
+				</tr> 
+				<tr> 
+					<td style="background-color:#F5F5F6; font-weight:bold; text-align:right" width="15%">投诉人id：</td> 
+					<td>{$info.tousu_uid}</td>   
+				</tr> 
+				<tr> 
+					<td style="background-color:#F5F5F6; font-weight:bold; text-align:right" width="15%">投诉类型：</td> 
+					<td><?php echo getFieldVal($info["type"],"投诉个人|1,投诉群|2");?></td>   
+				</tr> 
+				<tr> 
+					<td style="background-color:#F5F5F6; font-weight:bold; text-align:right" width="15%">时间：</td> 
+					<td>{if $info.addtime}{$info.addtime|date='Y-m-d H:i:s'}{/if}</td>   
+				</tr> 
+				<tr> 
+					<td style="background-color:#F5F5F6; font-weight:bold; text-align:right" width="15%">投诉描述：</td> 
+					<td>{$info.description}</td>   
+				</tr> 
+				<tr> 
+					<td style="background-color:#F5F5F6; font-weight:bold; text-align:right" width="15%">投诉对象id：</td> 
+					<td>{$info.tousu_type_id}</td>   
+				</tr> 
+			</tbody> 
+		</table> 
+	</div> 
+</div> 
+{/block} 
