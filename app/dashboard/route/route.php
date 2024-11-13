@@ -17,3 +17,5 @@ Route::post('Sys.Field/add', 'Sys.Field/add')->middleware('SetField');	//创建�
 Route::post('Sys.Field/update', 'Sys.Field/update')->middleware('UpField');	//修改字段
 Route::post('Sys.Field/delete', 'Sys.Field/delete')->middleware('DeleteField');	//删除字段
 Route::post('Sys.Application/delete', 'Sys.Application/delete')->middleware('DeleteApplication');	//删除应用
+
+

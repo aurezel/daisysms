@@ -35,10 +35,10 @@ class Login extends Dashboard
 		}
 		
 		if(!$info){
-			throw new ValidateException("请检查用户名或者密码");
+			throw new ValidateException("Please check your username or password");
 		}
 		if(!($info['status'])){
-			throw new ValidateException("该账户被禁用");
+			throw new ValidateException("The account is disabled");
 		}
         
 //		$info['nodes'] = db("access")->where('role_id','in',$info['user_role_ids'])->column('purviewval','id');

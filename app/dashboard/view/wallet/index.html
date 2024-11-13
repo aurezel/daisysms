@@ -348,31 +348,8 @@
         </div>
     </div>
 </div>
-<button type="button" onclick="CodeGoods.update(4293)" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
 <script>
-    var CodeGoods = {id: "CodeGoodsTable",seItem: null,table: null,layerIndex: -1};
-    CodeGoods.update = function (value) {
-        if(value){
-            var index = layer.open({type: 2,title: '修改',area: ['800px', '400px'],fix: false, maxmin: true,content: Feng.ctxPath + '/dashboard/wallet/charge?id='+value});
-            // var index = layer.open({type: 2,title: '修改',area: ['800px', '400px'],fix: false, maxmin: true,content:   +'http://baidu.com/?id='+value});
-            if(!IsPC()){layer.full(index)}
-        }else{
-            if (this.check()) {
-                var idx = '';
-                $.each(CodeGoods.seItem, function() {
-                    idx += ',' + this.id;
-                });
-                idx = idx.substr(1);
-                if(idx.indexOf(",") !== -1){
-                    Feng.info("请选择单条数据！");
-                    return false;
-                }
-                var index = layer.open({type: 2,title: '修改',area: ['800px', '400px'],fix: false, maxmin: true,content: Feng.ctxPath + '/MemberYzm/update?id='+idx});
-                this.layerIndex = index;
-                if(!IsPC()){layer.full(index)}
-            }
-        }
-    }
+
 
     $(document).ready(function() {
         $('.tab').on('click', function() {
@@ -408,24 +385,23 @@
         //  var amount = $('#amount').val();
         // console.log('t',amount)
         $('#btn-credit').on('click', function() {
-            let isAmount = $('#amount').val();
-            if(isAmount == ''){
+            let Amount = $('#amount').val();
+            if(Amount == ''){
                 return;
             }
-            var url = Feng.ctxPath + "/Dashboard/wallet/charge"; // 你想打开的页面 URL
-            window.open(url, '_blank'); // _blank 表示在新标签页中打开
-            // var ajax = new $ax(Feng.ctxPath + "/Dashboard/wallet/index", function (data) {
-            //     console.log(data)
-            //     openModalWithIframe("http://www.baidu.com");
-            //     // if ('00' === data.status) {
-            //     //     Feng.success(data.msg);
-            //     //     CodeGoods.table.refresh();
-            //     // } else {
-            //     //     // Feng.error(data.msg);
-            //     // }
-            // });
-            // ajax.set('amount', isAmount);
-            // ajax.start();
+            var ajax = new $ax(Feng.ctxPath + "/Dashboard/wallet/index", function (data) {
+
+                if ('00' === data.status) {
+                    var index = layer.open({type: 1,title: '修改',area: ['800px', '400px'],fix: false, maxmin: true,content: data.data});
+                    if(!IsPC()){layer.full(index)}
+                    // Feng.success(data.msg);
+                    // CodeGoods.table.refresh();
+                } else {
+                    Feng.error(data.msg);
+                }
+            });
+            ajax.set('amount', Amount);
+            ajax.start();
 
         });
     });

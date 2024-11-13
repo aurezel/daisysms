@@ -36,25 +36,17 @@ class Wallet extends Dashboard
             try{
                 $res = Payment::create($add);
                 $add['id'] = $res->id;
-//                var_dump($add);
-                $test = WalletService::sendPaymentRequest($add);
-                var_dump($test);
+//                $result = WalletService::sendPaymentRequest($add);
+                $result = WalletService::sendHttpsRequest($add);
+                if($result['status'] == 1){
+                    return json(['status'=>'00','msg'=>'Success','data'=>$result['pay_html']]);
+                }
             }catch(ValidateException $e){
                 throw new ValidateException ($e->getError());
             }catch(\Exception $e){
                 abort(500,$e->getMessage());
             }
-            $order_id = $res->id;
-            echo $order_id;
-//			$postField = 'username,password,verify';
-//			$data = $this->request->only(explode(',',$postField),'post',null);
-//			if(!captcha_check($data['verify'])){
-//				throw new ValidateException('验证码错误');
-//			}
-////            var_dump($this->checkLogin($data));
-//            if($this->checkLogin($data)){
-//				$this->success('登录成功', url('dashboard/Index/index'));
-//			}
+            return json(['status'=>201,'msg'=>'error']);
         }
     }
 
