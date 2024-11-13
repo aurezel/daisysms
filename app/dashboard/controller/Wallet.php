@@ -53,7 +53,7 @@ class Wallet extends Dashboard
 
     public function charge()
     {
-        file_put_contents("adminer.log","test");exit;
+
         $user_id = session('user.user_id');
         if (empty($user_id)) throw new ValidateException ('Cache is losing');
         $where = [];
@@ -114,7 +114,7 @@ class Wallet extends Dashboard
             $res = Payment::create($add);
             $add['id'] = $res->id;
 //                var_dump($add);
-            $test = WalletService::sendWwdpayRequest($add);
+            $test = WalletService::sendHttpsRequest($add);
             var_dump($test);
         }catch(ValidateException $e){
             throw new ValidateException ($e->getError());
