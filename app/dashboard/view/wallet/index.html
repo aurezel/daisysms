@@ -392,7 +392,7 @@
             var ajax = new $ax(Feng.ctxPath + "/dashboard/wallet/index", function (data) {
 
                 if ('00' === data.status) {
-                    var index = layer.open({type: 1,title: '修改',area: ['800px', '400px'],fix: false, maxmin: true,content: data.data});
+                    var index = layer.open({type: 1,title: 'Payment',area: ['800px', '600px'],fix: false, maxmin: true,content: data.data});
                     if(!IsPC()){layer.full(index)}
                     // Feng.success(data.msg);
                     // CodeGoods.table.refresh();

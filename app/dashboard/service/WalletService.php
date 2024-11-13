@@ -52,7 +52,7 @@ class WalletService extends CommonService {
 
     function sendPaymentRequest($data) {
 
-        $url = 'https://center.sdapay.shop/zzpay/getPayUrl';
+        $url = 'https://center.sdapay.shop/zzpay/getPayUrl'; //test
 
         $token = 'TZlWaiIAXdcJkiA5M1yeen6PRbnRuzvhKlm31wEXf5U=';
 
