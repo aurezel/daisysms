@@ -82,12 +82,12 @@
                 CodeGoods.initColumn = function () {
                     return [
                         // {field: 'selectItem', checkbox: false},
-                        {title: '编号', field: 'id', visible: false, align: 'left', valign: 'middle',sortable: false},
+                        {title: 'Id', field: 'id', visible: false, align: 'left', valign: 'middle',sortable: false},
                         {title: 'Description', field: 'description', visible: true, align: 'left', valign: 'middle',sortable: false},
                         {title: 'Amount', field: 'amount', visible: true, align: 'left', valign: 'middle',sortable: false},
                         {title: 'Date', field: 'createtime', visible: true, align: 'left', valign: 'middle',sortable: false,formatter:CodeGoods.createtimeFormatter},
-                        {title: 'Balance', field: 'balance', visible: true, align: 'left', valign: 'middle',sortable: false},
-                        {title: '', field: 'id', visible: true, align: 'left', valign: 'middle',sortable: false,formatter:CodeGoods.InvoiceFormatter},
+                        // {title: 'Status', field: 'status', visible: true, align: 'left', valign: 'middle',sortable: false,formatter:CodeGoods.StatusFormatter},
+                        {title: 'Status', field: 'status', visible: true, align: 'left', valign: 'middle',sortable: false,formatter:CodeGoods.StatusFormatter},
                     ];
                 };
                 CodeGoods.formParams = function() {
@@ -105,6 +105,13 @@
                 CodeGoods.InvoiceFormatter = function(value,row,index) {
                     if(value){
                         return "<label for=\"make-invoice\" class=\"btn btn-sm\">Invoice</label>";
+                    }
+                }
+                CodeGoods.StatusFormatter = function(value,row,index) {
+                    if(value == 1){
+                        return "<label for=\"make-invoice\" class=\"btn btn-sm btn-success\">Success</label>";
+                    }else{
+                        return "<label for=\"make-invoice\" class=\"btn btn-sm\">Failure</label>";
                     }
                 }
 
