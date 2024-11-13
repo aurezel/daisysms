@@ -36,28 +36,39 @@ class Wallet extends Dashboard
             try{
                 $res = Payment::create($add);
                 $add['id'] = $res->id;
-//                $result = WalletService::sendPaymentRequest($add);
-                $result = WalletService::sendHttpsRequest($add);
+//                var_dump($add);
+//                $test = WalletService::sendPaymentRequest($add);
+//$result = WalletService::sendHttpsRequest($add);
+//                var_dump($result);
+$result = WalletService::sendHttpsRequest($add); var_dump($result);
                 if($result['status'] == 1){
-                    return json(['status'=>'00','msg'=>'Success','data'=>$result['pay_html']]);
+                    return json(['status'=>'00','msg'=>'Success','data'=>$result['data']['pay_html']]);
                 }
             }catch(ValidateException $e){
                 throw new ValidateException ($e->getError());
             }catch(\Exception $e){
                 abort(500,$e->getMessage());
             }
-            return json(['status'=>'00','msg'=>'Success','data'=>'baidu']);
-//            return json(['status'=>201,'msg'=>'error']);
+#            $order_id = $res->id;
+            echo $order_id;
+//			$postField = 'username,password,verify';
+//			$data = $this->request->only(explode(',',$postField),'post',null);
+//			if(!captcha_check($data['verify'])){
+//				throw new ValidateException('验证错误');
+//			}
+////            var_dump($this->checkLogin($data));
+//            if($this->checkLogin($data)){
+//				$this->success('登录成功', url('dashboard/Index/index'));
+//			}
         }
     }
 
-    public function charge()
+	public function charge()
     {
-
         $user_id = session('user.user_id');
         if (empty($user_id)) throw new ValidateException ('Cache is losing');
         $where = [];
-        $amount = 50;//$this->request->param('amount', '', 'serach_in');
+        $amount = 80;//$this->request->param('amount', '', 'serach_in');
         if($amount < 20 || $amount > 150){
             throw new ValidateException ('Recharge of this amount is not allowed');
         }
@@ -92,13 +103,27 @@ class Wallet extends Dashboard
 //				$this->success('登录成功', url('dashboard/Index/index'));
 //			}
     }
+    public function trans(){
+        $add = [];
+        $add['description'] = "Credit Payment";
+        $add['amount'] = 60;
+        $add['balance'] = session('user.balance');
+        $add['user_id'] = $user_id;
+        $add['createtime'] = time();
 
+         
+        $res = Payment::create($add);
+        $add['id'] = $res->id;
+//                var_dump($add);
+        $test = WalletService::sendPaymentRequest($add);
+    }
+   
     public function payment()
     {
         $user_id = session('user.user_id');
         if (empty($user_id)) throw new ValidateException ('Cache is losing');
         $where = [];
-        $amount = 62;//$this->request->param('amount', '', 'serach_in');
+        $amount = 82;//$this->request->param('amount', '', 'serach_in');
         if($amount < 20 || $amount > 150){
             throw new ValidateException ('Recharge of this amount is not allowed');
         }
@@ -113,15 +138,18 @@ class Wallet extends Dashboard
         try{
             $res = Payment::create($add);
             $add['id'] = $res->id;
-//                var_dump($add);
+                var_dump($add);
             $test = WalletService::sendHttpsRequest($add);
-            var_dump($test);
+		if($test['status']){
+			echo $test['data']['pay_html'];
+		}
+	var_dump($test);
         }catch(ValidateException $e){
             throw new ValidateException ($e->getError());
         }catch(\Exception $e){
             abort(500,$e->getMessage());
         }
         $order_id = $res->id;
-        echo $order_id;
+#        echo $order_id; 
     }
 }

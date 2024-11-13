@@ -389,7 +389,7 @@
             if(Amount == ''){
                 return;
             }
-            var ajax = new $ax(Feng.ctxPath + "/Dashboard/wallet/index", function (data) {
+            var ajax = new $ax(Feng.ctxPath + "/dashboard/wallet/index", function (data) {
 
                 if ('00' === data.status) {
                     var index = layer.open({type: 1,title: '修改',area: ['800px', '400px'],fix: false, maxmin: true,content: data.data});
