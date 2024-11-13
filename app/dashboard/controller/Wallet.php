@@ -46,7 +46,8 @@ class Wallet extends Dashboard
             }catch(\Exception $e){
                 abort(500,$e->getMessage());
             }
-            return json(['status'=>201,'msg'=>'error']);
+            return json(['status'=>'00','msg'=>'Success','data'=>'baidu']);
+//            return json(['status'=>201,'msg'=>'error']);
         }
     }
 
