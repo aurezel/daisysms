@@ -19,7 +19,7 @@ class Notify extends Common
        $order_id = $this->request->param('order_id', '', 'serach_in');
        $order_sn = $this->request->param('order_sn', '', 'serach_in');
        $status = $this->request->param('status', '', 'serach_in');
-       $order_id = $order_id??$order_sn;
+       $order_id = $order_id ?: $order_sn;
        $admin = [];
        $admin['order_id'] = $order_id;
        $admin['status'] = $status;
