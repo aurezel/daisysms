@@ -91,7 +91,7 @@ class History extends Dashboard {
             $sort  = $this->request->post('sort', '', 'serach_in');		//排序方式 desc 或 asc
 
             $field = '*';
-            $orderby = ($sort && $order) ? $sort.' '.$order : 'id asc';
+            $orderby = ($sort && $order) ? $sort.' '.$order : 'id desc';
             $res = PaymentService::indexList(formatWhere($where),$field,$orderby,$limit,$page);
             return json($res);
         }
