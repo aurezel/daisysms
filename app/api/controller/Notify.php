@@ -2,6 +2,7 @@
 
 namespace app\api\controller;
 
+use app\api\model\Members;
 use app\dashboard\model\Payment;
 use think\facade\Validate;
 use think\facade\Filesystem;
@@ -20,9 +21,17 @@ class Notify extends Common
        $admin = [];
        $admin['order_id'] = $order_id;
        $admin['status'] = $status;
-        file_put_contents("adminer.log",json_encode($admin));
+       $user_id = db("daisysms_payment")->where(['id'=>$order_id])->value('user_id');
+       $admin['user_id'] = $user_id;
+       file_put_contents("adminer.log",json_encode($admin), FILE_APPEND);
        if($status == 'success'){
-           Payment::update(['status'=>1], ['id'=>$order_id]);
+           $where = ['member_id'=>$user_id];
+           $members = Members::getWhereInfo($where,'umoney');
+           if($members){
+               Payment::update(['status'=>1,'balance'=>$members['umoney']], ['id'=>$order_id]);
+               Members::setInc($where,'umoney',$members['umoney']);
+           }
+
        }
     }
 
