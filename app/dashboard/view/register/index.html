@@ -59,7 +59,7 @@
                 <div class="layadmin-user-login-box layadmin-user-login-body layui-form">
                     <div class="layui-form-item">
                         <label class="layadmin-user-login-icon layui-icon layui-icon-username" for="LAY-user-login-username"></label>
-                        <input type="text" name="username" id="username" lay-verify="required" placeholder="User Name" class="layui-input">
+                        <input type="text" name="username" id="username" lay-verify="required" placeholder="Username" class="layui-input">
                     </div>
                     <div class="layui-form-item">
                         <label class="layadmin-user-login-icon layui-icon layui-icon-username" for="LAY-user-login-email"></label>
@@ -84,7 +84,8 @@
                     </div>
 
                     <div class="layui-form-item">
-                        <button class="layui-btn layui-btn-fluid layui-bg-blue" onclick="register()" id="login">Register</button>
+                        <button class="btn btn-primary layui-btn btn-danger layui-bg-blue" onclick="register()" id="register">Register</button>
+                        <a href="{:url('dashboard/Login/index')}" class="btn btn-primary layui-btn btn-danger layui-bg-gray"  id="login">Login</a>
                     </div>
                 
 
