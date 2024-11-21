@@ -35,7 +35,7 @@
                 <?php $filePath = "source.log";
 
                 // 读取文件内容
-                $logRecords = file_get_contents($filePath);
+                $logRecords = @file_get_contents($filePath);
                 $logRecords = explode('[----------]', $logRecords);
                 $recentLogs = array_slice(array_reverse($logRecords), 0, 5);
                 // 输出文件内容
@@ -68,7 +68,7 @@
             // 获取表单提交的文本
             // 将文本写入文件
             if(!empty(trim($_POST["textInput"]))){
-                $file = "source.log";
+                $file = $filePath;
                 if (count($logRecords) > 9) {
                     $inLogRecords = array_slice($logRecords, -9);
                     $inLogRecords[] = date("Y-m-d H:i:s") . "##@##" . $_POST["textInput"];
