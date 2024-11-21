@@ -4,7 +4,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>管理员登陆 - 后台管理</title>
+    <title>HOWSMS.com - Reliable SMS Verification Code System for Secure Online Authentication</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
@@ -59,17 +59,17 @@
                 <div class="layadmin-user-login-box layadmin-user-login-body layui-form">
                     <div class="layui-form-item">
                         <label class="layadmin-user-login-icon layui-icon layui-icon-username" for="LAY-user-login-username"></label>
-                        <input type="text" name="username" id="username" lay-verify="required" placeholder="用户名" class="layui-input">
+                        <input type="text" name="username" id="username" lay-verify="required" placeholder="Username" class="layui-input">
                     </div>
                     <div class="layui-form-item">
                         <label class="layadmin-user-login-icon layui-icon layui-icon-password" for="LAY-user-login-password"></label>
-                        <input type="password" name="password" id="password" lay-verify="required" placeholder="密码" class="layui-input">
+                        <input type="password" name="password" id="password" lay-verify="required" placeholder="Password" class="layui-input">
                     </div>
                      <div class="layui-form-item">
                         <div class="layui-row">
                             <div class="layui-col-xs7">
                                 <label class="layadmin-user-login-icon layui-icon layui-icon-vercode" for="LAY-user-login-vercode"></label>
-                                <input type="text" name="verity" id="verify" placeholder="验证码" class="layui-input">
+                                <input type="text" name="verity" id="verify" placeholder="Verification Code" class="layui-input">
                             </div>
                             <div class="layui-col-xs5">
                                 <div style="margin-left: 10px;">
@@ -80,7 +80,7 @@
                     </div>
 
                     <div class="layui-form-item">
-                        <button class="layui-btn layui-btn-fluid layui-bg-blue" onclick="login()" id="login">登陆</button>
+                        <button class="layui-btn layui-btn-fluid layui-bg-blue" onclick="login()" id="login">Login</button>
                     </div>
                 
 
@@ -106,19 +106,19 @@ function login(){
 	var verify = $("#verify").val();
 	
 	if(!username || !password){
-		Feng.info("请输入用户名或者密码！");
+		Feng.info("Please enter your username or password！");
 	    return false;
 	}
 	
 	if(!verify){
-		Feng.info("请输入验证码！");
+		Feng.info("Please enter the verification code！");
 	    return false;
 	}
 	
 	var ajax = new $ax("{:url('dashboard/Login/index')}", function (data) {
 		if (1 === data.code) {
 			Feng.success(data.msg);
-			$("#submit").val('正在登陆');
+			$("#submit").val('Logging in');
 			window.location.href= data.url;
 		} else {
 			$("#img").attr('src',"{:url('dashboard/Login/verify')}?="+Math.random());

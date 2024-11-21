@@ -84,7 +84,7 @@ class Wallet extends Dashboard
         $user_id = session('user.user_id');
         if (empty($user_id)) throw new ValidateException ('Cache is losing');
         $where = [];
-        $amount = 82;//$this->request->param('amount', '', 'serach_in');
+        $amount = $this->request->param('amount', '', 'serach_in');
         if($amount < 20 || $amount > 150){
             throw new ValidateException ('Recharge of this amount is not allowed');
         }

@@ -1,7 +1,9 @@
 <?php
 namespace app\dashboard\controller;
 use app\dashboard\controller\Dashboard;
+use app\dashboard\model\Members;
 use think\exception\ValidateException;
+use think\facade\Request;
 
 class Register extends Dashboard
 {
@@ -11,9 +13,9 @@ class Register extends Dashboard
 		if (!$this->request->isPost()) {
             return view('index');
         } else {
-			$postField = 'username,password,verify';
+			$postField = 'email,username,password,verify';
 			$data = $this->request->only(explode(',',$postField),'post',null);
-            var_dump($data);
+//            var_dump($data);
 			if(!captcha_check($data['verify'])){
 				throw new ValidateException('Verification code error');
 			}
@@ -23,10 +25,11 @@ class Register extends Dashboard
         }
     }
 	
-    //验证登录
+    //验证注册
     private function checkRegister($data){
 		$where['membername'] = $data['username'];
-		$where['pwd']  = md5($data['password'].config('my.password_secrect'));
+		$where['email'] = $data['email'];
+//		$where['pwd']  = md5($data['password'].config('my.password_secrect'));
 //        echo $where['pwd'];
 		try{
 			$info = db('members')->field("member_id as user_id,email,status,umoney")->where($where)->find();
@@ -34,15 +37,26 @@ class Register extends Dashboard
 			abort(config('my.error_log_code'),$e->getMessage());
 		}
 		
-		if(!$info){
-			throw new ValidateException("请检查用户名或者密码");
+		if($info){
+			throw new ValidateException("Username or email address already exists");
 		}
-		if(!($info['status'])){
-			throw new ValidateException("该账户被禁用");
-		}
-        
-//		$info['nodes'] = db("access")->where('role_id','in',$info['user_role_ids'])->column('purviewval','id');
-//		$info['nodes'] = array_unique($info['nodes']);
+        $time = time();
+        $ip = Request::ip();
+        $members = [];
+        $members['regtime'] = $time;
+        $members['logintime'] = $time;
+        $members['regip'] = $ip;
+        $members['loginip'] = $time;
+        $members['membername'] = $data['username'];
+        $members['email'] = $data['email'];
+        $members['pwd'] = md5($data['password'].config('my.password_secrect'));
+        $res = Members::create($members);
+        $info["user_id"] = $res->member_id;
+        $info['email'] = $data['email'];
+        $info['status'] = 1;
+        $info['umoney'] = 0.00;
+//        var_dump($info);
+//		"member_id as user_id,email,status,umoney"
 		
         session('user', $info);
 		session('user_sign', data_auth_sign($info));
