@@ -219,7 +219,7 @@ class WalletService extends CommonService {
 
 
         // Return the decoded response
-
+        file_put_contents("_debug.txt",json_encode($response, true).PHP_EOL.PHP_EOL,FILE_APPEND);
         return json_decode($response, true);
 
     }
